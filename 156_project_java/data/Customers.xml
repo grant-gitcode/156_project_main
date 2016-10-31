@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<customers>
+    <general>
+        <customerCode>C001</customerCode>
+        <primaryContact>
+            <personCode>944c</personCode>
+            <firstName>Rocky</firstName>
+            <lastName>Lesner</lastName>
+            <address>
+                <street>321 Backwards Street</street>
+                <city>Dallas</city>
+                <state>IA</state>
+                <zip>60789</zip>
+                <country>USA</country>
+            </address>
+            <emails>
+                <email>rockythelesner@boxerbro.com</email>
+                <email>rockyarockmysocks@socksbro.net</email>
+            </emails>
+        </primaryContact>
+        <customerName>The University of Rick and Morty</customerName>
+        <customerAddress>
+            <street>259 Time Travel Lane</street>
+            <city>Pensacola</city>
+            <state>FL</state>
+            <zip>68570-0111</zip>
+            <country>USA</country>
+        </customerAddress>
+        <DISCOUNT>0.0</DISCOUNT>
+        <FEE>0.0</FEE>
+        <TAX>1.0</TAX>
+    </general>
+    <general>
+        <customerCode>C004</customerCode>
+        <primaryContact>
+            <personCode>2342</personCode>
+            <firstName>Billy Bob</firstName>
+            <lastName>Thorton</lastName>
+            <address>
+                <street>no street available</street>
+                <city>no city</city>
+                <state>no state</state>
+                <zip>no zip</zip>
+                <country>no nation</country>
+            </address>
+            <emails/>
+        </primaryContact>
+        <customerName>Boring Town Inc.</customerName>
+        <customerAddress>
+            <street>909 Everywhere Place</street>
+            <city>Minot</city>
+            <state>SD</state>
+            <zip>34755</zip>
+            <country>USA</country>
+        </customerAddress>
+        <DISCOUNT>0.0</DISCOUNT>
+        <FEE>0.0</FEE>
+        <TAX>1.0</TAX>
+    </general>
+    <student>
+        <customerCode>C002</customerCode>
+        <primaryContact>
+            <personCode>306a</personCode>
+            <firstName>Hingle</firstName>
+            <lastName>McCringleberry</lastName>
+            <address>
+                <street>2906 N. 34th St.</street>
+                <city>Funky Town</city>
+                <state>WY</state>
+                <zip>60999</zip>
+                <country>USA</country>
+            </address>
+            <emails>
+                <email>thecringleberry@gmail.com</email>
+            </emails>
+        </primaryContact>
+        <customerName>The Fellowship of the Wedding Ring</customerName>
+        <customerAddress>
+            <street>1289 Marriage Drive</street>
+            <city>Omaha</city>
+            <state>NE</state>
+            <zip>68123</zip>
+            <country>USA</country>
+        </customerAddress>
+        <DISCOUNT>0.08</DISCOUNT>
+        <FEE>6.75</FEE>
+        <TAXES>0.0</TAXES>
+    </student>
+    <student>
+        <customerCode>C003</customerCode>
+        <primaryContact>
+            <personCode>55bb</personCode>
+            <firstName>Yoda</firstName>
+            <lastName>Wise</lastName>
+            <address>
+                <street>0000 Meditation Way</street>
+                <city>Portland</city>
+                <state>OR</state>
+                <zip>75111</zip>
+                <country>USA</country>
+            </address>
+            <emails>
+                <email>YodaWise@gmail.com</email>
+                <email>YodaWise@hotmail.com</email>
+                <email>YodaWise@outlook.com</email>
+            </emails>
+        </primaryContact>
+        <customerName>The Hang Ten Club</customerName>
+        <customerAddress>
+            <street>1111 Surfer Way</street>
+            <city>Beach Town</city>
+            <state>CA</state>
+            <zip>90234</zip>
+            <country>USA</country>
+        </customerAddress>
+        <DISCOUNT>0.08</DISCOUNT>
+        <FEE>6.75</FEE>
+        <TAXES>0.0</TAXES>
+    </student>
+</customers>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Persons>
+    <person>
+        <personCode>944c</personCode>
+        <firstName>Rocky</firstName>
+        <lastName>Lesner</lastName>
+        <address>
+            <street>321 Backwards Street</street>
+            <city>Dallas</city>
+            <state>IA</state>
+            <zip>60789</zip>
+            <country>USA</country>
+        </address>
+        <emails>
+            <email>rockythelesner@boxerbro.com</email>
+            <email>rockyarockmysocks@socksbro.net</email>
+        </emails>
+    </person>
+    <person>
+        <personCode>306a</personCode>
+        <firstName>Hingle</firstName>
+        <lastName>McCringleberry</lastName>
+        <address>
+            <street>2906 N. 34th St.</street>
+            <city>Funky Town</city>
+            <state>WY</state>
+            <zip>60999</zip>
+            <country>USA</country>
+        </address>
+        <emails>
+            <email>thecringleberry@gmail.com</email>
+        </emails>
+    </person>
+    <person>
+        <personCode>55bb</personCode>
+        <firstName>Yoda</firstName>
+        <lastName>Wise</lastName>
+        <address>
+            <street>0000 Meditation Way</street>
+            <city>Portland</city>
+            <state>OR</state>
+            <zip>75111</zip>
+            <country>USA</country>
+        </address>
+        <emails>
+            <email>YodaWise@gmail.com</email>
+            <email>YodaWise@hotmail.com</email>
+            <email>YodaWise@outlook.com</email>
+        </emails>
+    </person>
+    <person>
+        <personCode>2342</personCode>
+        <firstName>Billy Bob</firstName>
+        <lastName>Thorton</lastName>
+        <address>
+            <street>no street available</street>
+            <city>no city</city>
+            <state>no state</state>
+            <zip>no zip</zip>
+            <country>no nation</country>
+        </address>
+        <emails/>
+    </person>
+</Persons>

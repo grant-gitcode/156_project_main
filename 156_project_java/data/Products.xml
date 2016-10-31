@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Products>
+    <movieTicket>
+        <productCode>fp12</productCode>
+        <units>0</units>
+        <movieDateTime>2016-10-21 13:10</movieDateTime>
+        <movieName>The Shiny</movieName>
+        <cost>20.0</cost>
+        <address>
+            <street>345 Bloody Mary Way</street>
+            <city>Gretna</city>
+            <state>NE</state>
+            <zip>68190</zip>
+            <country>USA</country>
+        </address>
+        <screenNo>4A</screenNo>
+        <pricePerUnit>20.0</pricePerUnit>
+        <discounted>false</discounted>
+    </movieTicket>
+    <seasonPass>
+        <productCode>b29e</productCode>
+        <units>0</units>
+        <name>Halloween Pass</name>
+        <cost>90.0</cost>
+        <seasonStartDate>2016-10-01 00:00</seasonStartDate>
+        <seasonEndDate>2016-10-31 00:00</seasonEndDate>
+    </seasonPass>
+    <parkingPass>
+        <productCode>90fa</productCode>
+        <units>0</units>
+        <cost>50.0</cost>
+    </parkingPass>
+    <refreshment>
+        <productCode>ff23</productCode>
+        <units>0</units>
+        <name>Butter Beer-200oz</name>
+        <cost>40.99</cost>
+    </refreshment>
+</Products>
