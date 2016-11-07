@@ -33,6 +33,10 @@ public class Email {
 		this.email = UtilityParser.emailParse(mailString);
 	}
 	
+	public void setEmail(ArrayList<String> x) {
+		this.email = x;
+	}
+	
 	
 
 	

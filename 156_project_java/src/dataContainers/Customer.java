@@ -54,6 +54,10 @@ public abstract class Customer extends Record {
 	public void setPrimaryContact(String primaryContact) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		this.primaryContact = DataConverter.accessPersonArrayList().searchContained(primaryContact);
 	}
+	
+	public void setPrimaryContact(Person x) {
+		this.primaryContact = x;
+	}
 
 	@XmlElement
 	public String getCustomerName() {
@@ -71,6 +75,10 @@ public abstract class Customer extends Record {
 	
 	public void setCustomerAddress(String customerAddress) {
 		this.customerAddress = new Address(customerAddress);
+	}
+	
+	public void setCustomerAddress(Address x) {
+		this.customerAddress = x;
 	}
 	
 	public abstract double getTax();

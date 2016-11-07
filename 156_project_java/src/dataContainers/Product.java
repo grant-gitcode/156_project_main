@@ -108,6 +108,10 @@ public abstract class Product extends Record {
 		this.attachedProduct = x;
 	}
 	
+	public void setAttachedProduct(Product x) {
+		this.attachedProduct = x;
+	}
+	
 	public String toString(Invoice inv) {
 		return this.getClass().toString();
 	}

@@ -1,8 +1,11 @@
 package database;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.mysql.jdbc.*;
+
+import dataContainers.Product;
 
 /**The class Database is intended to connect some java code with a specific MySQL database hosted
  * on the unl.cse.edu server, particularly the portion which contains a given student's database.
@@ -37,7 +40,7 @@ public class Database {
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	public void connectToDB() throws ClassNotFoundException, SQLException {
+	public Connection connectToDB() throws ClassNotFoundException, SQLException {
 		
 		//Sets the name of this class as a very specific path which is used by the database.
 		Class.forName(JDBC_DRIVER);
@@ -45,19 +48,14 @@ public class Database {
 		//Creates a Connection object by calling a method from the DriverManager class.
 		//Requires the URL of the database, and a username and password.
 		conn = (Connection) DriverManager.getConnection(DATABASE_URL,USER,PASS);
-		
+		return conn;
 	}
-	
-	
-	
-	
-	
 	
 	/**A clean up method to close the connection created by the connectToDB() method, so as to
 	 * release database resources such as cursors, handles. Checks to make sure the connection 
 	 * was actually opened first. 
 	 */
-	public void closeDBConnection() {
+	public void close() {
 		if(conn != null) {
 			try {
 				conn.close();
@@ -67,6 +65,102 @@ public class Database {
 			}
 		}
 	}
+	
+	/**The purpose of this method is to have an easy way to access the Products
+	 * table data in a ResultSet in a convenient and concise method.
+	 * 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ResultSet getTableSet(String table) throws SQLException {
+		
+		String query = "SELECT * FROM !";
+		query = query.replace("!", table);
+		ps = conn.clientPrepareStatement(query);
+		rt = (ResultSet) ps.executeQuery();
+		
+		return rt;
+		
+	}
+	
+	/**
+	 * The purpose of this method is to be a general way to return a single row of
+	 * a table in the form of a ResultSet. The method requires the name of the table
+	 * to be specified, and some specific identified (an ID for the table) to be 
+	 * given.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
+	 */
+	public ResultSet getRowsFromTable(String table, String column, int id) throws SQLException, ClassNotFoundException {
+		
+		String query = "SELECT * FROM ! WHERE $=?";
+		this.connectToDB();
+		query = query.replace("!",table);
+		query = query.replace("$", column);
+		ps = conn.clientPrepareStatement(query);
+		ps.setInt(1, id);
+		rt = (ResultSet) ps.executeQuery();
+		
+		
+		return rt;
+		
+	}
+	
+	/**
+	 * Gets the join of the Products, ProductInvoice and Invoice tables and returns 
+	 * them as a ResultSet.
+	 * @throws SQLException 
+	 */
+	public ResultSet getBigProductsJoin() throws SQLException {
+		
+		String query = "Products AS P JOIN ProductsInvoice AS PI JOIN Invoice AS I " +
+				"ON P.productsID = PI.productsID AND PI.invoiceID = I.invoiceID";
+		ps = conn.clientPrepareStatement(query);
+		rt = (ResultSet) ps.executeQuery();
+		
+		ps.close();
+		return rt;
+	}
+	
+	/**
+	 * Retrieves a table of an Invoice's Products from the database.
+	 * @param name
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ResultSet getInvoiceResultSet(int i) throws SQLException {
+		
+		String query = "SELECT * FROM Products AS P JOIN ProductsInvoice AS PI "
+				+ "ON P.productsID = PI.productsID WHERE invoiceID=?";
+		ps = conn.clientPrepareStatement(query);
+		ps.setInt(1, i);
+		
+		rt = (ResultSet) ps.executeQuery();
+		
+		
+		return rt;
+	}
+	
+	/**
+	 * Takes a specific productsID and finds a specific row of the join between
+	 * Products and ProductsInvoice.
+	 * @param i
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet getInvoiceProduct(int i) throws SQLException {
+			
+			String query = "SELECT * FROM Products AS P JOIN ProductsInvoice AS PI "
+					+ "ON P.productsID = PI.productsID WHERE productsInvoiceID=?";
+			ps = conn.clientPrepareStatement(query);
+			ps.setInt(1, i);
+			
+			rt = (ResultSet) ps.executeQuery();
+			
+			
+			return rt;
+		}
+	
 	
 
 }

@@ -1,19 +1,59 @@
 package com.ceg.ext;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.ResultSet;
+
+import database.Database;
+
 /*
  * This is a collection of utility methods that define a general API for
  * interacting with the database supporting this application.
  * 15 methods in total, add more if required.
- * Donot change any method signatures or the package name.
+ * Do not change any method signatures or the package name.
  * 
  */
 
 public class InvoiceData {
 
 	/**
-	 * 1. Method that removes every person record from the database
+	 * 1. Method that removes every person record from the database. This method also
+	 * removes all email addresses (since these are only associated with Person table)
+	 * and also removes any rows in the address table which match with the addresses
+	 * of the Person table. This is to prevent the storing of data which is not associated
+	 * with anything.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public static void removeAllPersons() {}
+	public static void removeAllPersons() throws ClassNotFoundException, SQLException {
+		
+		Database db = new Database();
+		Connection conn = db.connectToDB();
+		
+		PreparedStatement ps = null;
+		
+		String[] queries = new String[6];
+		
+		queries[0] = "SET foreign_key_checks = 0";
+		queries[1] = "DELETE FROM Address USING Address, Person" 
+				+" WHERE Address.addressID = Person.AddressID";
+		queries[2] = "DELETE FROM Person"; 
+		queries[3] = "ALTER TABLE Person AUTO_INCREMENT = 1";
+		queries[4] = "DELETE FROM Email";
+		queries[5] = queries[3];
+		
+		for(int i = 0; i < 6; i++) {
+			ps = (PreparedStatement) conn.prepareStatement(queries[i]);
+			ps.executeUpdate();
+		}
+		
+		ps.close();
+		conn.close();
+		db.close();
+		
+	}
 
 	/**
 	 * 2. Method to add a person record to the database with the provided data.
@@ -26,8 +66,49 @@ public class InvoiceData {
 	 * @param state
 	 * @param zip
 	 * @param country
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public static void addPerson(String personCode, String firstName, String lastName, String street, String city, String state, String zip, String country) {}
+	public static void addPerson(String personCode, String firstName, String lastName, String street, String city, String state, String zip, String country) throws ClassNotFoundException, SQLException {
+		
+		Database db = new Database();
+		Connection conn = db.connectToDB();
+		
+		PreparedStatement ps = null;
+		int addressID = 0;
+		
+		
+		String query1 = "INSERT INTO Address (street,city,state,zip,country) "
+				+"VALUES (?,?,?,?,?)";
+		String query2 =  "SELECT LAST_INSERT_ID() FROM Address";
+		String query3 = "INSERT INTO Person (personCode, firstName, lastName, addressID)"
+				+ " VALUES (?,?,?,?)";
+		
+		ps = (PreparedStatement) conn.prepareStatement(query1);
+		ps.setString(1, street);
+		ps.setString(2, city);
+		ps.setString(3, state);
+		ps.setString(4, zip);
+		ps.setString(5, country);
+		ps.executeUpdate();
+		
+		ps = (PreparedStatement) conn.prepareStatement(query2);
+		ResultSet rt = (ResultSet) ps.executeQuery();
+		rt.next();
+		addressID = rt.getInt("LAST_INSERT_ID()");
+		
+		ps = (PreparedStatement) conn.prepareStatement(query3);
+		ps.setString(1, personCode);
+		ps.setString(2, firstName);
+		ps.setString(3, lastName);
+		ps.setInt(4, addressID);
+		ps.executeUpdate();
+		
+		rt.close();
+		ps.close();
+		conn.close();
+		db.close();
+	}
 
 	/**
 	 * 3. Adds an email record corresponding person record corresponding to the

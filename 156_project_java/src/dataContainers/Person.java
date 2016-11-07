@@ -94,5 +94,9 @@ public class Person extends Record {
 		this.emails = new Email(emailAddress);
 	}
 	
+	public void setEmails(Email y) {
+		this.emails = y;
+	}
+	
 }
 
