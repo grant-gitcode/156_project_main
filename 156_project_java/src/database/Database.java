@@ -161,6 +161,17 @@ public class Database {
 			return rt;
 		}
 	
+	public ResultSet getAddress(int i) throws SQLException {
+		
+		String query = "SELECT * FROM Address WHERE addressID=?";
+		ps = conn.clientPrepareStatement(query);
+		ps.setInt(1, i);
+		
+		rt = (ResultSet) ps.executeQuery();
+		
+		return rt;
+	}
+	
 	
 
 }

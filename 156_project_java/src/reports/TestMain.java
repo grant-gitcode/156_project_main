@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import com.ceg.ext.InvoiceData;
 
-import Factories.PersonFactory;
 import dataContainers.Person;
 import database.Database;
 
