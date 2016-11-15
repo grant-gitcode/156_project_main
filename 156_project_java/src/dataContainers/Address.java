@@ -18,9 +18,9 @@ import com.sun.xml.internal.txw2.annotation.XmlElement;
 @XmlRootElement
 @XmlType(propOrder = {"street","city","state","zip","country"})
 public class Address {
+	private String street;
 	private String city;
 	private String state;
-	private String street;
 	private String zip;
 	private String country;
 	
@@ -120,8 +120,10 @@ public class Address {
 	}
 	
 	/**
-	 * A method to compare the equality of two Address objects. Equality is determined if each of
-	 * the following address fields are matching (ignoring case): <br><br>
+	 * A method to compare the equality of two Address objects. Each Address object must
+	 * be non-null and each field must be non-null for equality to be possible. Equality 
+	 * is determined if each of the following address fields are matching (ignoring case): 
+	 * <br><br>
 	 * 1. Street<br>
 	 * 2. City <br>
 	 * 3. State <br>
@@ -134,20 +136,60 @@ public class Address {
 		
 		Address addr = (Address) obj;
 		
-		if(this.street.toUpperCase().equals(addr.getStreet().toUpperCase())) {
-			if(this.city.toUpperCase().equals(addr.getCity().toUpperCase())) {
-				if(this.state.toUpperCase().equals(addr.getState().toUpperCase())) {
-					if(this.zip.toUpperCase().equals(addr.getZip().toUpperCase())) {
-						if(this.country.toUpperCase().equals(addr.getCountry().toUpperCase())) {
-							return true;
+		if(!this.isEmpty() && !addr.isEmpty()) {
+			if(this.street.toUpperCase().equals(addr.getStreet().toUpperCase())) {
+				if(this.city.toUpperCase().equals(addr.getCity().toUpperCase())) {
+					if(this.state.toUpperCase().equals(addr.getState().toUpperCase())) {
+						if(this.zip.toUpperCase().equals(addr.getZip().toUpperCase())) {
+							if(this.country.toUpperCase().equals(addr.getCountry().toUpperCase())) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * A method to determine if a given Address object is empty or
+	 * partially empty -- that is to say, this method checks to make
+	 * sure that all fields in the Address class are non-null.
+	 * @return
+	 */
+	public boolean isEmpty() {
+		
+		if(this.street != null) {
+			if(this.city != null) {
+				if(this.state != null) {
+					if(this.zip != null) {
+						if(this.country != null) {
+							return false;
 						}
 					}
 				}
 			}
 		}
 		
-		return false;
+		return true;
 	}
 	
+	/**
+	 * Overridden hashCode() method for the Address class.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime*result + ((this.street == null) ? 0: this.street.hashCode());
+		result = prime*result + ((this.city == null) ? 0: this.city.hashCode());
+		result = prime*result + ((this.state == null) ? 0: this.state.hashCode());
+		result = prime*result + ((this.zip == null) ? 0: this.zip.hashCode());
+		result = prime*result + ((this.country == null) ? 0: this.country.hashCode());
+		
+		return result;
+	}
 }
 

@@ -115,15 +115,73 @@ public abstract class Product extends Record {
 	 * following criteria: <br><br>
 	 * <b> ProductCode </b> Case-sensitive String comparison.<br>
 	 * <b> Units </b> A test to see if integer values match. <br>
-	 * <b> AttachedProduct </b> Calls this method to check if the attached products are the same. <br>
-	 * <b> Invoice </b> Checks to see if both objects have the same Invoice object associated
-	 * with them.
+	 * <b> AttachedProduct </b> First checks, to see if each Product has an attached product. If they both
+	 * do not, no more methods are called. If one does and the other does not, they're clearly not the same
+	 * Product object, and false is returned. If both have an attached Product, this method is called again
+	 * on the attached product.
 	 */
 	@Override
 	public boolean equals(Object obj) {
+		Product prod = (Product) obj;
 		
-		
+		if(!this.isEmpty() && !prod.isEmpty()) {
+			if(this.productCode.equals(prod.getProductCode())) {
+				if(this.units == prod.getUnits()) {
+					
+					//Case 1: Both products have an attached product -- check to see if products match.
+					if(this.attachedProduct != null && prod.getAttachedProduct() != null) {
+						if(this.attachedProduct.equals(prod.getAttachedProduct())) return true;
+						else return false;
+					}
+					
+					//Case 2: One product has an attached product and the other does not.
+					if(this.attachedProduct == null || prod.attachedProduct == null) {
+						if(!(this.attachedProduct == null && prod.attachedProduct == null)) {
+							return false;
+						}
+					}
+					
+					//Case 3: Both products have no attached product.
+					if(this.attachedProduct == null && prod.attachedProduct == null) {
+						return true;
+					}
+					
+				}
+			}
+		}
 		return false;
 		
+	}
+	
+	/**
+	 * A method to determine if a given Product object is empty, where empty
+	 * is defined as a single field within the Product object being null, with
+	 * the exception of the units field.
+	 * @return
+	 */
+	public boolean isEmpty() {
+		
+		if(this.productCode != null) {
+				if(this.attachedProduct != null) {
+					return false;
+				}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Overridden hashCode() method for the Product class.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime*result + ((this.productCode == null) ? 0 : this.productCode.hashCode());
+		result = prime*result + ((this.units == 0) ? 0 : this.units);
+		result = prime*result + ((this.attachedProduct == null) ? 0 : this.attachedProduct.hashCode());
+		
+		return result;
 	}
 } 

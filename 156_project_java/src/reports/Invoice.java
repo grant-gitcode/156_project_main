@@ -88,6 +88,10 @@ public class Invoice {
 	public String getSalesperson() {
 		return this.salesperson.getLastName() + ", " + this.salesperson.getFirstName();
 	}
+	
+	public Person getSalespersonPerson() {
+		return this.salesperson;
+	}
 
 	public void setSalesperson(Person salesperson) {
 		this.salesperson = salesperson;
@@ -275,15 +279,75 @@ public class Invoice {
 		return passes;
 	}
 	
-	/**
+	/**The equals() method for the Invoice class checks if two Invoice objects are equal along the
+	 * following criteria: <br><br>
+	 * <b> InvoiceCode </b> Compares two Strings, is case-sensitive. <br>
+	 * <b> Customer </b> Uses custom defined equals() method for two Customer objects. <br>
+	 * <b> InvoiceDate </b> Compares two Date objects. <br>
+	 * <b> Salesperson </b> Compares two person objects using the overridden equals() method. <br>
+	 * <b> ProductList </b> Compares the two ProductList objects within the Invoice. Uses the
+	 * custom ProductList equals() method. <br><br>
+	 * Both Invoice objects must be non-empty, where non-empty means all fields in both objects are
+	 * non-null, else the method will return false.
 	 * 
 	 */
 	@Override
 	public boolean equals(Object obj) {
+		Invoice inv = (Invoice) obj;
 		
-		
+		if(!this.isEmpty() && !inv.isEmpty()) {
+			if(this.invoiceCode.equals(inv.getInvoiceCode())) {
+				if(this.customer.equals(inv.getCustomer())) {
+					if(this.invoiceDate.equals(inv.getInvoiceDateDate())) {
+						if(this.salesperson.equals(inv.getSalespersonPerson())) {
+							if(this.productList.equals(inv.getProductList())) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
 		
 		return false;
+	}
+	
+	/**
+	 * A method to determine if a given Invoice object is empty, where
+	 * empty is defined as an Invoice object containing at least one
+	 * null field.
+	 * @return
+	 */
+	public boolean isEmpty() {
+		
+		if(this.invoiceCode != null) {
+			if(this.customer != null) {
+				if(this.salesperson != null) {
+					if(this.productList != null) {
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Overridden hashCode() method for the Invoice class.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime*result + ((this.invoiceCode == null) ? 0 : this.invoiceCode.hashCode());
+		result = prime*result + ((this.customer == null) ? 0 : this.customer.hashCode());
+		result = prime*result + ((this.invoiceDate == null) ? 0 : this.invoiceDate.hashCode());
+		result = prime*result + ((this.salesperson == null) ? 0 : this.salesperson.hashCode());
+		result = prime*result + ((this.productList == null) ? 0 : this.productList.hashCode());
+		
+		return result;
 	}
 	
 }

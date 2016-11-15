@@ -170,6 +170,45 @@ public class Products extends Container{
 		}
 	}
 	
+	/**
+	 * Overriding the equals method for the Products class, the method checks the following criteria for 
+	 * equality: <br><br>
+	 * <b> Products </b> Checks an ArrayList of Product objects one by one. Objects must be in the same order,
+	 * must be the same Product objects, and the ArrayList must be of the same length.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		
+		Products list = (Products) obj;
+		
+		if(!this.isEmpty() && !list.isEmpty()) {
+			if(this.products.size() == list.products.size()) {
+				for(int i = 0; i < this.products.size(); i++) {
+					if(!this.products.get(i).equals(list.products.get(i))) return false;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 	
+	public boolean isEmpty() {
+		
+		if(this.products != null) return false;
+		
+		return true;
+	}
 	
+	/**
+	 * Overridden method for hashCode() for the Products class.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime*result + ((this.products == null) ? 0 : this.products.hashCode());
+		
+		return result;
+	}
 }

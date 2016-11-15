@@ -1,5 +1,7 @@
 package linkedListADT;
 
+import java.util.Iterator;
+
 /**
  * This class provides an abstract LinkedList which can sort objects using a comparator
  * class which is given at instantiation. This class can hold an object of any type and
@@ -8,7 +10,7 @@ package linkedListADT;
  *
  * @param <T>
  */
-public class LinkedList<T> {
+public class LinkedList<T> implements Iterable{
 	
 	private Node startNode;
 	private Node endNode;
@@ -77,6 +79,28 @@ public class LinkedList<T> {
 		T toFind = null;
 		
 		return toFind;
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new IteratorADT();
+	}
+	
+	class IteratorADT implements Iterator<T> {
+		int index = 0;
+
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public T next() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 	}
 	
 	

@@ -111,7 +111,9 @@ public class Person extends Record {
 	 * method. This is not case sensitive. <br>
 	 * <b> 5. Emails </b> The Email objects in each Person object must batch based upon a previously
 	 * defined .equals() method. This is not case sensitive, and the order of Strings inside the
-	 * Email object does matter.  
+	 * Email object does matter. <br><br>
+	 * In addition to this, if there exists a field in either class which is null, the method will
+	 * return false, as the object(s) would be considered empty.
 	 * @param pers
 	 * @return
 	 */
@@ -119,20 +121,60 @@ public class Person extends Record {
 	public boolean equals(Object obj) {
 		Person pers = (Person) obj;
 		
-		if(this.personCode.equals(pers.getPersonCode())) {
-			if(this.firstName.toUpperCase().equals(pers.getFirstName().toUpperCase())) {
-				if(this.lastName.toUpperCase().equals(pers.getLastName().toUpperCase())) {
-					if(this.address.equals(pers.getAddress())) {
-						if(this.emails.equals(pers.getEmails())) {
-							return true;
+		if(!this.isEmpty() && !this.isEmpty()) {
+			if(this.personCode.equals(pers.getPersonCode())) {
+				if(this.firstName.toUpperCase().equals(pers.getFirstName().toUpperCase())) {
+					if(this.lastName.toUpperCase().equals(pers.getLastName().toUpperCase())) {
+						if(this.address.equals(pers.getAddress())) {
+							if(this.emails.equals(pers.getEmails())) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * A method to determine if a given Person object is empty. If a single
+	 * field of the Person object is null, the object is considered empty.
+	 * @return
+	 */
+	public boolean isEmpty() {
+		
+		if(this.personCode != null) {
+			if(this.firstName != null) {
+				if(this.lastName != null) {
+					if(this.address != null) {
+						if(this.emails != null) {
+							return false;
 						}
 					}
 				}
 			}
 		}
 		
-		return false;
+		
+		return true;
 	}
 	
+	/**
+	 * Overridden hashCode method for the Person class.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime*result + ((this.personCode == null) ? 0 : this.personCode.hashCode());
+		result = prime*result + ((this.firstName == null) ? 0 : this.firstName.hashCode());
+		result = prime*result + ((this.lastName == null) ? 0 : this.lastName.hashCode());
+		result = prime*result + ((this.address == null) ? 0 : this.address.hashCode());
+		result = prime*result + ((this.emails == null) ? 0 : this.emails.hashCode());
+		
+		return result;
+	}
 }
 

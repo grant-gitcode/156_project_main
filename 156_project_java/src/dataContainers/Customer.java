@@ -99,23 +99,61 @@ public abstract class Customer extends Record {
 	 * object using the overridden equals() method defined in the Address class. <br><br>
 	 * One caveat of this method is that it does not take into account whether any given pair of
 	 * Customer objects are of type Student or General. For that level of comparison, use the
-	 * Student equals() method or the General equals() method.
+	 * Student equals() method or the General equals() method. <br><br>
+	 * In addition to this, the method will return false if either of the objects is empty, where
+	 * empty is defined as the existence of a field in an object which is null.
 	 */
 	@Override
 	public boolean equals(Object obj) {
 		Customer cust = (Customer) obj;
 		
-		if(this.customerCode.equals(cust.getCustomerCode())) {
-			if(this.primaryContact.equals(cust.getPrimaryContact())) {
-				if(this.customerName.toUpperCase().equals(cust.getCustomerName().toUpperCase())) {
-					if(this.customerAddress.equals(cust.getCustomerAddress())) {
-						return true;
+		if(!this.isEmtpy() && !cust.isEmtpy()) {
+			if(this.customerCode.equals(cust.getCustomerCode())) {
+				if(this.primaryContact.equals(cust.getPrimaryContact())) {
+					if(this.customerName.toUpperCase().equals(cust.getCustomerName().toUpperCase())) {
+						if(this.customerAddress.equals(cust.getCustomerAddress())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * A method to determine if a Customer object is empty, where empty is defined
+	 * as a single field or more being null.
+	 * @return
+	 */
+	public boolean isEmtpy() {
+		
+		if(this.customerCode != null) {
+			if(this.primaryContact != null) {
+				if(this.customerName != null) {
+					if(this.customerAddress != null) {
+						return false;
 					}
 				}
 			}
 		}
 		
-		return false;
+		return true;
 	}
 	
+	/**
+	 * Overridden hashCode() method for the Customer class.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime*result + ((this.customerCode == null) ? 0 : this.customerCode.hashCode());
+		result = prime*result + ((this.primaryContact == null) ? 0 : this.primaryContact.hashCode());
+		result = prime*result + ((this.customerName == null) ? 0 : this.customerName.hashCode());
+		result = prime*result + ((this.customerAddress == null) ? 0 : this.customerAddress.hashCode());
+		
+		return result;
+	}
 }
