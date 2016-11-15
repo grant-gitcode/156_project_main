@@ -136,7 +136,7 @@ public class InvoiceReport {
 			}
 			
 			if(inv.getProductList().getProducts().get(i).getClass().equals(SeasonPass.class)) {
-				System.out.printf("%10s %-80s\n","",inv.getSeasonPasses().get(k).toStringTwo());
+				System.out.printf("%10s %-80s\n","",inv.getSeasonPasses().get(k).toStringTwo(inv));
 				k++;
 			}
 		}

@@ -119,5 +119,35 @@ public class Address {
 		
 	}
 	
+	/**
+	 * A method to compare the equality of two Address objects. Equality is determined if each of
+	 * the following address fields are matching (ignoring case): <br><br>
+	 * 1. Street<br>
+	 * 2. City <br>
+	 * 3. State <br>
+	 * 4. Zip <br>
+	 * 5. Country
+	 *  
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		
+		Address addr = (Address) obj;
+		
+		if(this.street.toUpperCase().equals(addr.getStreet().toUpperCase())) {
+			if(this.city.toUpperCase().equals(addr.getCity().toUpperCase())) {
+				if(this.state.toUpperCase().equals(addr.getState().toUpperCase())) {
+					if(this.zip.toUpperCase().equals(addr.getZip().toUpperCase())) {
+						if(this.country.toUpperCase().equals(addr.getCountry().toUpperCase())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 }
 

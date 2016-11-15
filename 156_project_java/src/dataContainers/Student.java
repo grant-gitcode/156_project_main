@@ -45,4 +45,22 @@ public class Student extends Customer {
 	public String toString() {
 		return "Student";
 	}
+	
+	/**The equals() method for the Student class simply calls the equals() method for the Customer
+	 * class with the added caveat that it checks to see if the object passed is in fact of the 
+	 * Student class.
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+
+		if(this.getClass().equals(obj.getClass())) {
+			if(super.equals(obj)) {
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
 }

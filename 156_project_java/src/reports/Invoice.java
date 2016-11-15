@@ -117,7 +117,7 @@ public class Invoice {
 	public String getProductSubtotal(int i) {
 		DecimalFormat format = new DecimalFormat("0.00");
 		format.setRoundingMode(RoundingMode.HALF_UP);
-		BigDecimal u = BigDecimal.valueOf(this.productList.getProducts().get(i).computeSubTotal());
+		BigDecimal u = BigDecimal.valueOf(this.productList.getProducts().get(i).computeSubTotal(this));
 		
 		return format.format(u);
 		
@@ -131,7 +131,7 @@ public class Invoice {
 	public String getProductTax(int i) {
 		DecimalFormat format = new DecimalFormat("0.00");
 		format.setRoundingMode(RoundingMode.HALF_UP);
-		BigDecimal u = BigDecimal.valueOf(this.getProductList().getProducts().get(i).getTax());
+		BigDecimal u = BigDecimal.valueOf(this.getProductList().getProducts().get(i).getTax(this));
 
 		return format.format(u);
 	}
@@ -162,7 +162,7 @@ public class Invoice {
 		double x = 0;
 		
 		for(int i =0; i < this.productList.getProducts().size(); i++){
-			x += this.productList.getProducts().get(i).computeSubTotal();
+			x += this.productList.getProducts().get(i).computeSubTotal(this);
 		}
 		BigDecimal u = BigDecimal.valueOf(x);
 		return format.format(u);
@@ -178,7 +178,7 @@ public class Invoice {
 		double x = 0;
 		
 		for(int i =0; i < this.productList.getProducts().size(); i++){
-			x += this.productList.getProducts().get(i).getTax();
+			x += this.productList.getProducts().get(i).getTax(this);
 		}
 		BigDecimal u = BigDecimal.valueOf(x);
 		return format.format(u);
@@ -273,6 +273,17 @@ public class Invoice {
 		}
 		
 		return passes;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		
+		
+		
+		return false;
 	}
 	
 }

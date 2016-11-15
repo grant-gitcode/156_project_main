@@ -87,4 +87,35 @@ public abstract class Customer extends Record {
 	
 	public abstract double getDiscount();
 	
+	/**
+	 * The equals() method for the Customer class tests for equality between two Customer objects
+	 * along the following criteria: <br><br>
+	 * <b> CustomerCode </b> This is a case sensitive String comparison.<br>
+	 * <b> PrimaryContact </b> This is a comparison of two Person objects using the overridden
+	 * equals() method for the Person class. <br>
+	 * <b> CustomerName </b> This is a case-insensitive comparison of the names of two Customer
+	 * objects. <br>
+	 * <b> CustomerAddress </b> This is a comparison of the two Address objects within each Customer
+	 * object using the overridden equals() method defined in the Address class. <br><br>
+	 * One caveat of this method is that it does not take into account whether any given pair of
+	 * Customer objects are of type Student or General. For that level of comparison, use the
+	 * Student equals() method or the General equals() method.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		Customer cust = (Customer) obj;
+		
+		if(this.customerCode.equals(cust.getCustomerCode())) {
+			if(this.primaryContact.equals(cust.getPrimaryContact())) {
+				if(this.customerName.toUpperCase().equals(cust.getCustomerName().toUpperCase())) {
+					if(this.customerAddress.equals(cust.getCustomerAddress())) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 }

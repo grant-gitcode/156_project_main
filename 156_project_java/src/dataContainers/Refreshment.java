@@ -25,12 +25,6 @@ public class Refreshment extends Service{
 	private double cost;
 	private double discount = 0.0;
 	
-	public Refreshment(String productCode, String name, String cost, Invoice inv) {
-		super(productCode, inv);
-		this.name = name;
-		this.cost = Double.parseDouble(cost);
-		}
-	
 	public Refreshment(String productCode, String name, String cost) {
 		super(productCode);
 		this.name = name;
@@ -71,15 +65,15 @@ public class Refreshment extends Service{
 	}
 
 	@Override
-	public double computeSubTotal() {
+	public double computeSubTotal(Invoice inv) {
 		double x = this.cost*super.getUnits();
 		return x - x*this.discount;
 	}
 
 	@Override
-	public double getTax() {
-		double x = this.computeSubTotal();
-		return x*super.getTax();
+	public double getTax(Invoice inv) {
+		double x = this.computeSubTotal(inv);
+		return x*super.getTax(inv);
 	}
 
 	/**

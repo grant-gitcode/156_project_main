@@ -23,14 +23,8 @@ public abstract class Product extends Record {
 	private String productCode;
 	private int units;
 	private Product attachedProduct;
-	private Invoice inv;
-	 
-	public Product(String productCode, Invoice inv){
-		this.productCode = productCode;
-		this.inv = inv;
-	}
 	
-	public Product(String productCode) {
+	public Product(String productCode){
 		this.productCode = productCode;
 	}
 	
@@ -39,11 +33,10 @@ public abstract class Product extends Record {
 		this.units = Integer.parseInt(units);
 	}
 	
-	public Product(String productCode, String units, String attachedProduct, Invoice inv) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public Product(String productCode, String units, String attachedProduct) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		this.productCode = productCode;
 		this.units = Integer.parseInt(units);
 		this.attachedProduct = ((Product) DataConverter.accessProductArrayList().searchContained(attachedProduct));
-		this.inv = inv;
 	}
 	 
 	public Product() {
@@ -58,15 +51,6 @@ public abstract class Product extends Record {
 		this.attachedProduct = toClone.attachedProduct;
 		this.productCode = toClone.productCode;
 		this.units = toClone.units;
-		this.inv = toClone.inv;
-	}
-	
-	public Invoice getInv() {
-		return this.inv;
-	}
-
-	public void setInv(Invoice inv) {
-		this.inv = inv;
 	}
 	
 	public String getProductCode() {
@@ -118,11 +102,28 @@ public abstract class Product extends Record {
 	
 	public abstract Product copyProduct(Product x);
 	
-	public abstract double computeSubTotal();
+	public abstract double computeSubTotal(Invoice inv);
 	
-	public abstract double getTax();
+	public abstract double getTax(Invoice inv);
 	
 	public abstract void setDiscount();
 	
 	public abstract double getDiscount();
+	
+	/**
+	 * The overridden equals() method for Product tests to see if objects are the same along the
+	 * following criteria: <br><br>
+	 * <b> ProductCode </b> Case-sensitive String comparison.<br>
+	 * <b> Units </b> A test to see if integer values match. <br>
+	 * <b> AttachedProduct </b> Calls this method to check if the attached products are the same. <br>
+	 * <b> Invoice </b> Checks to see if both objects have the same Invoice object associated
+	 * with them.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		
+		
+		return false;
+		
+	}
 } 

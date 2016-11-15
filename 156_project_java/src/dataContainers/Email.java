@@ -37,7 +37,31 @@ public class Email {
 		this.email = x;
 	}
 	
-	
+	/**
+	 * A simple method to test for equality between two email objects. Two email objects are
+	 * considered equal if two criteria are met:
+	 * <br><br>
+	 * 1. The lengths of the ArrayList of type Email in both are equal. <br>
+	 * 2. The uppercase version of the email strings at position <i>n</i> matches in both email
+	 * ArrayLists for all positions <i>n</i>. That is to say, both Email objects hold the same 
+	 * emails in the same order.
+	 * @param mail
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		Email mail = (Email) obj;
+		
+		if(this.email.size() == mail.email.size()) {
+			for(int i = 0; i < this.email.size();i++) {
+				if(!this.email.get(i).toUpperCase().equals(mail.email.get(i).toUpperCase())) {
+					return false;
+				}
+				if(i == this.email.size()-1) return true;
+			}
+		}
+		return false;
+	}
 
 	
 }

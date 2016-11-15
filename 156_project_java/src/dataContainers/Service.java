@@ -17,10 +17,6 @@ public abstract class Service extends Product {
 		
 	}
 	
-	public Service(String productCode, Invoice inv) {
-		super(productCode, inv);
-	}
-	
 	public Service(String productCode) {
 		super(productCode);
 	}
@@ -30,13 +26,13 @@ public abstract class Service extends Product {
 	}
 
 	@Override
-	public double computeSubTotal() {
+	public double computeSubTotal(Invoice inv) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public double getTax() {
+	public double getTax(Invoice inv) {
 		return this.TAX;
 	}
 

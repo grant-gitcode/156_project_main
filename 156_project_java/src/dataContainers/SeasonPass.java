@@ -27,15 +27,6 @@ public class SeasonPass extends Ticket {
 	private Date seasonEndDate;
 	private double cost;
 	
-	public SeasonPass(String productCode, String name, String startDate, String endDate, String cost, Invoice inv) {
-		super(productCode, inv);
-		this.name = name;
-		this.seasonStartDate = UtilityParser.stringToDate(startDate);
-		this.seasonEndDate = UtilityParser.stringToDate(endDate);
-		this.cost = Double.parseDouble(cost);
-		
-	}
-	
 	public SeasonPass(String productCode, String name, String startDate, String endDate, String cost) {
 		super(productCode);
 		this.name = name;
@@ -110,12 +101,12 @@ public class SeasonPass extends Ticket {
 	 * A method for computing the subtotal for SeasonPass objects.
 	 */
 	@Override
-	public double computeSubTotal() {
+	public double computeSubTotal(Invoice inv) {
 		long d = 1;
 		long q = 1;
 		
-		if(this.seasonStartDate.getTime() < this.getInv().getInvoiceDateDate().getTime()) {
-			d =  (this.seasonEndDate.getTime() - this.getInv().getInvoiceDateDate().getTime())/1000/60/60/24;
+		if(this.seasonStartDate.getTime() < inv.getInvoiceDateDate().getTime()) {
+			d =  (this.seasonEndDate.getTime() - inv.getInvoiceDateDate().getTime())/1000/60/60/24;
 			q = ((this.seasonEndDate.getTime() - this.seasonStartDate.getTime())/1000/3600/24);
 		}
 
@@ -123,8 +114,8 @@ public class SeasonPass extends Ticket {
 	}
 
 	@Override
-	public double getTax() {
-		return this.computeSubTotal()*super.getTax();
+	public double getTax(Invoice inv) {
+		return this.computeSubTotal(inv)*super.getTax(inv);
 	}
 
 	@Override
@@ -140,15 +131,15 @@ public class SeasonPass extends Ticket {
 	 * of the text seen on the individual invoice reports for a given SeasonPass object.
 	 * @return
 	 */
-	public String toStringTwo() {
+	public String toStringTwo(Invoice inv) {
 		
 		NumberFormat formatter = new DecimalFormat("#0.00");
 		formatter.setRoundingMode(RoundingMode.HALF_UP);
 				
 		String x = "";
 		
-		if(this.getInv().getInvoiceDateDate().after(this.seasonStartDate)) {
-			long d = (this.seasonEndDate.getTime() - this.getInv().getInvoiceDateDate().getTime())/1000/60/60/24;
+		if(inv.getInvoiceDateDate().after(this.seasonStartDate)) {
+			long d = (this.seasonEndDate.getTime() - inv.getInvoiceDateDate().getTime())/1000/60/60/24;
 			long q =  (this.seasonEndDate.getTime() - this.seasonStartDate.getTime())/1000/60/60/24;
 			x = " prorated " + d+"/"+q+" days";
 		}

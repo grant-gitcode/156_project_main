@@ -47,5 +47,22 @@ public class General extends Customer{
 		return "General";
 	}
 	
+	/**The equals() method for the General class simply calls the equals() method for the Customer
+	 * class with the added caveat that it checks to see if the object passed is in fact of the 
+	 * General class.
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
 
+		if(this.getClass().equals(obj.getClass())) {
+			if(super.equals(obj)) {
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
 }

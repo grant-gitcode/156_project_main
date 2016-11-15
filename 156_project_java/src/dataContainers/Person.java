@@ -98,5 +98,41 @@ public class Person extends Record {
 		this.emails = y;
 	}
 	
+	/**
+	 * This method tests for equality between two Person objects, returning true if the are the
+	 * same along the following criteria: <br><br>
+	 * <b> 1. PersonCode </b> The PersonCode strings must match exactly between each object. This
+	 * is case sensitive. <br>
+	 * <b> 2. firstName </b> The Strings representing the first names of each Person must match. 
+	 * This is not case sensitive. <br>
+	 * <b> 3. lastName </b> The Strings representing the last names of each Person must match.
+	 * This is not case sensitive. <br>
+	 * <b> 4. Address </b> The Address objects must match using their previously defined .equals()
+	 * method. This is not case sensitive. <br>
+	 * <b> 5. Emails </b> The Email objects in each Person object must batch based upon a previously
+	 * defined .equals() method. This is not case sensitive, and the order of Strings inside the
+	 * Email object does matter.  
+	 * @param pers
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		Person pers = (Person) obj;
+		
+		if(this.personCode.equals(pers.getPersonCode())) {
+			if(this.firstName.toUpperCase().equals(pers.getFirstName().toUpperCase())) {
+				if(this.lastName.toUpperCase().equals(pers.getLastName().toUpperCase())) {
+					if(this.address.equals(pers.getAddress())) {
+						if(this.emails.equals(pers.getEmails())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 }
 

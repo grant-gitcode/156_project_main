@@ -35,17 +35,6 @@ public class MovieTicket extends Ticket {
 	private Address address;
 	private boolean discounted;
 
-	public MovieTicket(String productCode, String dateTime, String movieName, String address, String screenNo, String pricePerUnit, Invoice inv) {
-		super(productCode, inv);
-		this.movieDateTime = dateTime;
-		this.movieName = movieName;
-		this.cost = Double.parseDouble(pricePerUnit);
-		this.address = new Address(address);
-		this.screenNo = screenNo;
-		this.pricePerUnit = Double.parseDouble(pricePerUnit);
-		this.discounted = UtilityParser.isDiscounted(this.movieDateTime);
-	}
-	
 	public MovieTicket(String productCode, String dateTime, String movieName, String address, String screenNo, String pricePerUnit) {
 		super(productCode);
 		this.movieDateTime = dateTime;
@@ -168,15 +157,15 @@ public class MovieTicket extends Ticket {
 	}
 
 	@Override
-	public double computeSubTotal() {
+	public double computeSubTotal(Invoice inv) {
 		double p = this.cost * (double) super.getUnits();
 		if(this.discounted) p -= p*.07;
 		return p;
 	}
 
 	@Override
-	public double getTax() {
-		return this.computeSubTotal()*super.getTax();
+	public double getTax(Invoice inv) {
+		return this.computeSubTotal(inv)*super.getTax(inv);
 	}
 
 	/**

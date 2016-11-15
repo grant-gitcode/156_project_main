@@ -84,7 +84,6 @@ public class Products extends Container{
 			 * pass a reference to this object we're creating.
 			 */
 			newInvoiceProduct.setUnits(Integer.parseInt(scan2.next()));
-			newInvoiceProduct.setInv(inv);
 			if(scan2.hasNext()) newInvoiceProduct.setAttachedProduct(scan2.next(), this);
 			
 			//Adds the newly created product to this Products object.
@@ -170,5 +169,7 @@ public class Products extends Container{
 			
 		}
 	}
+	
+	
 	
 }

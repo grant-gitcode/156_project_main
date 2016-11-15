@@ -21,11 +21,6 @@ public class ParkingPass extends Service {
 	private double cost;
 	private double discount = 0.0;
 	
-	public ParkingPass(String productCode, String parkingFee, Invoice inv) {
-		super(productCode, inv);
-		this.cost = Double.parseDouble(parkingFee);
-	}
-	
 	public ParkingPass(String productCode, String parkingFee) {
 		super(productCode);
 		this.cost = Double.parseDouble(parkingFee);
@@ -52,16 +47,16 @@ public class ParkingPass extends Service {
 	}
 	
 	@Override
-	public double computeSubTotal() {
+	public double computeSubTotal(Invoice inv) {
 		double x = this.cost * super.getUnits();
 		x -= this.discount;
 		return x;
 	}
 
 	@Override
-	public double getTax() {
-		double x = this.computeSubTotal();
-		return x*super.getTax();
+	public double getTax(Invoice inv) {
+		double x = this.computeSubTotal(inv);
+		return x*super.getTax(inv);
 	}
 
 	/**
