@@ -45,54 +45,55 @@ public class Products extends Container{
 	 */
 	public Products(String rawProductList, Invoice inv) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
-		//Creation of a scanner to parse the string by comma, creating unique strings for the 
-		//creation of each unique product.
-		Scanner scan = new Scanner(rawProductList.substring(1));
-		scan.useDelimiter(",");
-		//delimitedProducts is an ArrayList of product strings used for constructors
-		ArrayList<String> delimitedProducts = new ArrayList<String>();
-
-		//Creates a new String in delimitedProducts ArrayList based off each product string
-		//in a given line of the original Invoice flat file.
-		while(scan.hasNext()) {
-			delimitedProducts.add(scan.next());
+		if(!rawProductList.isEmpty()) {
+			//Creation of a scanner to parse the string by comma, creating unique strings for the 
+			//creation of each unique product.
+			Scanner scan = new Scanner(rawProductList.substring(1));
+			scan.useDelimiter(",");
+			//delimitedProducts is an ArrayList of product strings used for constructors
+			ArrayList<String> delimitedProducts = new ArrayList<String>();
+	
+			//Creates a new String in delimitedProducts ArrayList based off each product string
+			//in a given line of the original Invoice flat file.
+			while(scan.hasNext()) {
+				delimitedProducts.add(scan.next());
+			}
+			
+			//A for loop cycling through each of the product strings.
+			for(int t = 0; t < delimitedProducts.size(); t++) {
+				
+				//Each product string has at least 2 subdivisions; at most 3. To parse these
+				//subdivisions, we use the : as a delimiter.
+				Scanner scan2 = new Scanner(delimitedProducts.get(t));
+				scan2.useDelimiter(":");
+				
+				/**So the first part of each individual product string is the product code. We
+				 * parse this and then create an object from it by searching our list of products.
+				 * Next, we create a copy of this object which is the specific object for this 
+				 * given Invoice (rather than the general objects we got from the non-Invoice flat
+				 * files which serve as our templates.
+				 */
+				String product = scan2.next();
+				Product newProduct = DataConverter.accessProductArrayList().searchContained(product);
+				Product newInvoiceProduct = newProduct.copyProduct(newProduct);
+				
+				/**
+				 * Looks at the second part of the individual product string (the part after the 
+				 * colon) and uses it to set the units field of the newly created Product object.
+				 * If there is a third sub-division, this will always be some attached product,
+				 * so we call the setAttachedProduct() method using this last sub-string and 
+				 * pass a reference to this object we're creating.
+				 */
+				newInvoiceProduct.setUnits(Integer.parseInt(scan2.next()));
+				if(scan2.hasNext()) newInvoiceProduct.setAttachedProduct(scan2.next(), this);
+				
+				//Adds the newly created product to this Products object.
+				this.products.add(newInvoiceProduct);
+				scan2.close();
+			}
+			
+			scan.close();
 		}
-		
-		//A for loop cycling through each of the product strings.
-		for(int t = 0; t < delimitedProducts.size(); t++) {
-			
-			//Each product string has at least 2 subdivisions; at most 3. To parse these
-			//subdivisions, we use the : as a delimiter.
-			Scanner scan2 = new Scanner(delimitedProducts.get(t));
-			scan2.useDelimiter(":");
-			
-			/**So the first part of each individual product string is the product code. We
-			 * parse this and then create an object from it by searching our list of products.
-			 * Next, we create a copy of this object which is the specific object for this 
-			 * given Invoice (rather than the general objects we got from the non-Invoice flat
-			 * files which serve as our templates.
-			 */
-			String product = scan2.next();
-			Product newProduct = DataConverter.accessProductArrayList().searchContained(product);
-			Product newInvoiceProduct = newProduct.copyProduct(newProduct);
-			
-			/**
-			 * Looks at the second part of the individual product string (the part after the 
-			 * colon) and uses it to set the units field of the newly created Product object.
-			 * If there is a third sub-division, this will always be some attached product,
-			 * so we call the setAttachedProduct() method using this last sub-string and 
-			 * pass a reference to this object we're creating.
-			 */
-			newInvoiceProduct.setUnits(Integer.parseInt(scan2.next()));
-			if(scan2.hasNext()) newInvoiceProduct.setAttachedProduct(scan2.next(), this);
-			
-			//Adds the newly created product to this Products object.
-			this.products.add(newInvoiceProduct);
-			scan2.close();
-		}
-		
-		scan.close();
-		
 	}
 	
 	public Products() {

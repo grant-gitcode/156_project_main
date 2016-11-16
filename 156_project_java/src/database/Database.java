@@ -84,6 +84,23 @@ public class Database {
 	}
 	
 	/**
+	 * This method returns the number of rows of a given table.
+	 * @throws SQLException 
+	 */
+	public int getTableSize(String table) throws SQLException {
+		
+		String query = "SELECT COUNT(*) FROM $";
+		query = query.replace("$", table);
+		ps = conn.clientPrepareStatement(query);
+		rt = (ResultSet) ps.executeQuery();
+		
+		rt.next();
+		int x = rt.getInt("COUNT(*)");
+		
+		return x;
+	}
+	
+	/**
 	 * The purpose of this method is to be a general way to return a single row of
 	 * a table in the form of a ResultSet. The method requires the name of the table
 	 * to be specified, and some specific identified (an ID for the table) to be 
@@ -91,16 +108,14 @@ public class Database {
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public ResultSet getRowsFromTable(String table, String column, int id) throws SQLException, ClassNotFoundException {
+	public ResultSet getRowFromTable(String table, String column, int id) throws SQLException, ClassNotFoundException {
 		
 		String query = "SELECT * FROM ! WHERE $=?";
-		this.connectToDB();
 		query = query.replace("!",table);
 		query = query.replace("$", column);
 		ps = conn.clientPrepareStatement(query);
 		ps.setInt(1, id);
 		rt = (ResultSet) ps.executeQuery();
-		
 		
 		return rt;
 		

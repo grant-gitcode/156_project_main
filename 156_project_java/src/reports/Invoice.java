@@ -84,6 +84,10 @@ public class Invoice {
 	public void setInvoiceDate(Date invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
+	
+	public void setInvoiceDate(String invoiceDate) {
+		this.invoiceDate = UtilityParser.stringToDate(invoiceDate);
+	}
 
 	public String getSalesperson() {
 		return this.salesperson.getLastName() + ", " + this.salesperson.getFirstName();

@@ -75,6 +75,10 @@ public class SeasonPass extends Ticket {
 	public void setSeasonStartDate(String startDate) {
 		this.seasonStartDate = UtilityParser.stringToDate(startDate);
 	}
+	
+	public void setSeasonStartDate(Date startDate) {
+		this.seasonStartDate = startDate;
+	}
 
 	@XmlElement
 	public String getSeasonEndDate() {
@@ -88,6 +92,11 @@ public class SeasonPass extends Ticket {
 	public void setSeasonEndDate(String endDate) {
 		this.seasonEndDate = UtilityParser.stringToDate(endDate);
 	}
+	
+	public void setSeasonEndDate(Date endDate) {
+		this.seasonEndDate = endDate;
+	}
+	
 	@XmlElement
 	public double getCost() {
 		return this.cost;
@@ -104,7 +113,6 @@ public class SeasonPass extends Ticket {
 	public double computeSubTotal(Invoice inv) {
 		long d = 1;
 		long q = 1;
-		
 		if(this.seasonStartDate.getTime() < inv.getInvoiceDateDate().getTime()) {
 			d =  (this.seasonEndDate.getTime() - inv.getInvoiceDateDate().getTime())/1000/60/60/24;
 			q = ((this.seasonEndDate.getTime() - this.seasonStartDate.getTime())/1000/3600/24);

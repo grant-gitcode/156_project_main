@@ -11,10 +11,11 @@ import dataContainers.MovieTicket;
 import dataContainers.SeasonPass;
 import dataContainers.Student;
 import fileReader.InvoiceReader;
+import linkedListADT.LinkedList;
 
 public class InvoiceReport {
 	
-	private ArrayList<Invoice> invoiceList;
+	private LinkedList invoiceList;
 	public static final String DASHED_ROW = new String(new char[130]).replace("\0", "-");
 	
 	/**
@@ -38,16 +39,16 @@ public class InvoiceReport {
 		 
 		 //Creation of the reader/writer pair of objects here. Then prints out the report summary.
 		 InvoiceReader reader = new InvoiceReader("data/Invoices.dat");
-		 InvoiceReport report = new InvoiceReport(reader.getInvoiceList());
-		 report.printSummaryReport();
+		 //InvoiceReport report = new InvoiceReport(reader.getInvoiceList());
+		 //report.printSummaryReport();
 		 
 		 System.out.println("Individual Invoice Detail Reports\n" + DASHED_ROW +"\n"+ DASHED_ROW);
 		 
 		 //Loops to print out the individual reports for each Invoice object in the report object's
 		 //Invoice ArrayList.
-		 for(int i = 0; i < report.invoiceList.size(); i++) {
-			 report.printIndividualReports(report.invoiceList.get(i));
-		 }
+		// for(int i = 0; i < report.invoiceList.size(); i++) {
+			// report.printIndividualReports((Invoice) report.invoiceList.get(i));
+		// }
 		 
 	 }
 	 
@@ -55,15 +56,15 @@ public class InvoiceReport {
 		 
 	 }
 	 
-	 public InvoiceReport(ArrayList<Invoice> invoiceList) {
+	 public InvoiceReport(LinkedList invoiceList) {
 		 this.invoiceList = invoiceList;
 	 }
 	 
-	public ArrayList<Invoice> getInvoiceList() {
+	public LinkedList getInvoiceList() {
 		return this.invoiceList;
 	}
 
-	public void setInvoiceList(ArrayList<Invoice> invoiceList) {
+	public void setInvoiceList(LinkedList invoiceList) {
 		this.invoiceList = invoiceList;
 	}
 	
@@ -71,7 +72,8 @@ public class InvoiceReport {
 	 * A method which uses the ArrayList<Invoice> of an InvoiceReport object to print out a summary
 	 * for all individual Invoice objects. Sends text to the standard output.
 	 */
-	public void printSummaryReport() {
+	public void printSummaryReport(LinkedList invoiceList) {
+		this.invoiceList = invoiceList;
 		
 		System.out.println(DASHED_ROW + "\nExecutive Summary Report\n" + DASHED_ROW);
 		System.out.printf("%-10s %-40s %-20s %-10s %-10s %-10s %-10s %-10s\n", "Invoice","Customer","Salesperson","Subtotal","Fees","Taxes","Discount","Total");
@@ -79,24 +81,24 @@ public class InvoiceReport {
 		for(int i = 0; i < this.invoiceList.size(); i++) {
 			
 			String fee = "0.00";
-					if(this.invoiceList.get(i).getCustomer().getClass().equals(Student.class)) {
-						fee = this.invoiceList.get(i).getStudentFee();
+					if(((Invoice) this.invoiceList.get(i)).getCustomer().getClass().equals(Student.class)) {
+						fee = ((Invoice) this.invoiceList.get(i)).getStudentFee();
 					}
 					
 			String discount = "-0.00";
-			if(this.invoiceList.get(i).getCustomer().getClass().equals(Student.class)) {
-				discount = this.invoiceList.get(i).getStudentDiscount();
+			if(((Invoice) this.invoiceList.get(i)).getCustomer().getClass().equals(Student.class)) {
+				discount = ((Invoice) this.invoiceList.get(i)).getStudentDiscount();
 			}
 			
 			System.out.printf("%-10s %-40s %-20s $%-10s $%-10s $%-10s $%-10s $%-10s \n", //120 long
-					this.invoiceList.get(i).getInvoiceCode(),
-					this.invoiceList.get(i).getCustomer().getCustomerName() + " ["+this.invoiceList.get(i).getCustomer().toString() +"]",
-					this.invoiceList.get(i).getSalesperson(),
-					this.invoiceList.get(i).sumSubTotals(),
+					((Invoice) this.invoiceList.get(i)).getInvoiceCode(),
+					((Invoice) this.invoiceList.get(i)).getCustomer().getCustomerName() + " ["+((Invoice) this.invoiceList.get(i)).getCustomer().toString() +"]",
+					((Invoice) this.invoiceList.get(i)).getSalesperson(),
+					((Invoice) this.invoiceList.get(i)).sumSubTotals(),
 					fee,
-					this.invoiceList.get(i).sumTax(),
+					((Invoice) this.invoiceList.get(i)).sumTax(),
 					discount,
-					this.invoiceList.get(i).getTotalTotal()
+					((Invoice) this.invoiceList.get(i)).getTotalTotal()
 					);
 		}
 		System.out.println();
@@ -157,7 +159,7 @@ public class InvoiceReport {
 		double x = 0;
 		
 		for(int i = 0; i < this.invoiceList.size(); i++) {
-			x += Double.parseDouble(this.invoiceList.get(i).sumSubTotals());
+			x += Double.parseDouble(((Invoice) this.invoiceList.get(i)).sumSubTotals());
 		}
 		
 		BigDecimal u = BigDecimal.valueOf(x);
@@ -170,8 +172,8 @@ public class InvoiceReport {
 		double x = 0;
 		
 		for(int i = 0; i < this.invoiceList.size(); i++) {
-			if(this.invoiceList.get(i).getCustomer().getClass().equals(Student.class)) {
-				x += Double.parseDouble(this.invoiceList.get(i).getStudentFee());
+			if(((Invoice) this.invoiceList.get(i)).getCustomer().getClass().equals(Student.class)) {
+				x += Double.parseDouble(((Invoice) this.invoiceList.get(i)).getStudentFee());
 			}
 		}
 		
@@ -185,7 +187,7 @@ public class InvoiceReport {
 		double x = 0;
 		
 		for(int i = 0; i < this.invoiceList.size(); i++) {
-			x += Double.parseDouble(this.invoiceList.get(i).sumTax());
+			x += Double.parseDouble(((Invoice) this.invoiceList.get(i)).sumTax());
 		}
 		
 		BigDecimal u = BigDecimal.valueOf(x);
@@ -198,8 +200,8 @@ public class InvoiceReport {
 		double x = 0;
 		
 		for(int i = 0; i < this.invoiceList.size(); i++) {
-			if(this.invoiceList.get(i).getCustomer().getClass().equals(Student.class)) {
-				x += Double.parseDouble(this.invoiceList.get(i).getStudentDiscount());
+			if(((Invoice) this.invoiceList.get(i)).getCustomer().getClass().equals(Student.class)) {
+				x += Double.parseDouble(((Invoice) this.invoiceList.get(i)).getStudentDiscount());
 			}
 		}
 		
@@ -214,7 +216,7 @@ public class InvoiceReport {
 		double x = 0;
 		
 		for(int i = 0; i < this.invoiceList.size(); i++) {
-			x += Double.parseDouble(this.invoiceList.get(i).getTotalTotal());
+			x += Double.parseDouble(((Invoice) this.invoiceList.get(i)).getTotalTotal());
 		}
 		
 		BigDecimal u = BigDecimal.valueOf(x);

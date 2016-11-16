@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.ResultSetMetaData;
+
 import containerClasses.Products;
 import database.Database;
 import reports.Invoice;
@@ -18,8 +20,11 @@ import reports.Invoice;
  */
 public class ObjectFactory {
 	
-	private Database db = new Database();
-	private ResultSet rt;
+	private Database db;
+	
+	public ObjectFactory(Database db) {
+		this.db = db;
+	}
 	
 	/**
 	 * The purpose of this method is to be able to create Address objects quickly and
@@ -29,8 +34,10 @@ public class ObjectFactory {
 	 */
 	public Address createAddress(int id) throws SQLException, ClassNotFoundException {
 		
+		ResultSet rt;
+		
 		Address addr = new Address();
-		rt = db.getRowsFromTable("Address", "addressID", id);
+		rt = db.getRowFromTable("Address", "addressID", id);
 		rt.next();
 		addr.setStreet(rt.getString("street"));
 		addr.setCity(rt.getString("city"));
@@ -38,6 +45,7 @@ public class ObjectFactory {
 		addr.setZip(rt.getString("zip"));
 		addr.setCountry(rt.getString("country"));
 		
+		rt.close();
 		return addr;
 	}
 	
@@ -51,8 +59,9 @@ public class ObjectFactory {
 	 */
 	public Customer createCustomer(int id) throws SQLException, ClassNotFoundException {
 		
+		ResultSet rt;
 		Customer cust = null;
-		rt = db.getRowsFromTable("Customer", "customerID", id);
+		rt = db.getRowFromTable("Customer", "customerID", id);
 		
 		rt.next();
 		String type = rt.getString("subClass");
@@ -70,6 +79,7 @@ public class ObjectFactory {
 		cust.setPrimaryContact(createPerson(rt.getInt("personID")));
 		cust.setCustomerAddress(createAddress(rt.getInt("addressID")));
 		
+		rt.close();
 		return cust;
 	}
 	
@@ -83,9 +93,10 @@ public class ObjectFactory {
 	 */
 	public Email createEmail(int i) throws SQLException, ClassNotFoundException {
 		
+		ResultSet rt;
 		Email e = new Email();
 		ArrayList<String> emailList = new ArrayList<String>();
-		rt = db.getRowsFromTable("Email","personID", i);
+		rt = db.getRowFromTable("Email","personID", i);
 		
 		while(rt.next()) {
 			emailList.add(rt.getString("emailAddress"));
@@ -93,30 +104,31 @@ public class ObjectFactory {
 		
 		e.setEmail(emailList);
 		
+		rt.close();
 		return e;
 	}
 	
 	/**
-	 * This method creates the Invoice located at a specific row in the Invoice table.
-	 * Accepts a customerID to create potentially multiple Invoice objects, returned
-	 * as an ArrayList.
-	 * @return
+	 * This method takes a row of the Invoice table and uses that data to create an
+	 * Invoice object.
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public ArrayList<Invoice> createInvoiceList(int i) throws SQLException, ClassNotFoundException {
+	public Invoice createInvoice(int i) throws ClassNotFoundException, SQLException {
 		
-		ArrayList<Invoice> invoices = new ArrayList<Invoice>();
-		rt = db.getRowsFromTable("Invoice","customerID", i);
+		ResultSet rt;
+		Invoice inv = new Invoice();
+		rt = db.getRowFromTable("Invoice", "invoiceID", i);
 		
-		while(rt.next()) {
-			Invoice inv = new Invoice();
-			inv.setInvoiceCode(rt.getString("invoiceCode"));
-			inv.setInvoiceDate(rt.getDate("date"));	
-			inv.setProductList(createProducts(i));
-		}
+		rt.next();
+		inv.setInvoiceCode(rt.getString("invoiceCode"));
+		inv.setCustomer(createCustomer(rt.getInt("customerID")));
+		inv.setInvoiceDate(rt.getDate("date"));
+		inv.setSalesperson(createPerson(rt.getInt("personID")));
+		inv.setProductList(createProducts(i));
 		
-		return invoices;
+		rt.close();
+		return inv;
 	}
 	
 	/**
@@ -127,8 +139,9 @@ public class ObjectFactory {
 	 */
 	public Person createPerson(int id) throws SQLException, ClassNotFoundException {
 		
+		ResultSet rt;
 		Person pers = new Person();
-		rt = db.getRowsFromTable("Person", "personID", id);
+		rt = db.getRowFromTable("Person", "personID", id);
 		
 		rt.next();
 		pers.setPersonCode(rt.getString("personCode"));
@@ -139,6 +152,7 @@ public class ObjectFactory {
 		int addressID = rt.getInt("addressID");
 		pers.setAddress(createAddress(addressID));	
 		
+		rt.close();
 		return pers;
 		
 	}
@@ -154,10 +168,12 @@ public class ObjectFactory {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException 
 	 */
-	public Product createProduct(int i, int invoiceID) throws SQLException, ClassNotFoundException {
+	public Product createProduct(int prodInvID) throws SQLException, ClassNotFoundException {
 		
-		rt = db.getInvoiceProduct(i);
+		ResultSet rt = db.getInvoiceProduct(prodInvID);
+		rt.next();
 		ResultSet rt2 = db.getAddress(rt.getInt("addressID"));
+		rt2.next();
 		String type;
 		Product p = null;
 		
@@ -188,6 +204,8 @@ public class ObjectFactory {
 			case "S":
 				SeasonPass s = new SeasonPass();
 				s.setName(rt.getString("productName"));
+				s.setSeasonStartDate(rt.getDate("startDate"));
+				s.setSeasonEndDate(rt.getDate("endDate"));
 				s.setCost(rt.getDouble("cost"));
 				p = s;
 				break;
@@ -214,22 +232,21 @@ public class ObjectFactory {
 		 *to this object. 
 		 */
 		if(rt.getInt("attachedProductID") != 0) {
-			ResultSet pd = db.getRowsFromTable
-					("Products", "ProductsID",rt.getInt("attachedProductID"));
-			p.setAttachedProduct(this.createAttachedProduct(pd, 1,invoiceID));
+			ResultSet pd = db.getInvoiceProduct(rt.getInt("attachedProductID"));
+			p.setAttachedProduct(this.createAttachedProduct(pd));
 		}
 		
+		rt.close();
 		return p;
 		
 	}
 	
-	public Product createAttachedProduct(ResultSet rt, int i, int id) throws SQLException {
-		
+	public Product createAttachedProduct(ResultSet rt) throws SQLException {
+		rt.next();
 		ResultSet rt2 = db.getAddress(rt.getInt("addressID"));
 		String type;
 		Product p = null;
-		
-		rt.next();
+		rt2.next();
 		type = rt.getString("subType").toUpperCase();
 		
 		/*This provides a case for all attached classes. The nature of the
@@ -262,9 +279,12 @@ public class ObjectFactory {
 				break;
 		}
 		
-		p.setProductCode(rt.getString("productCode"));
-		p.setUnits(rt.getInt("units"));
-
+		if(type == "M" || type == "S") {
+			p.setProductCode(rt.getString("productCode"));
+			p.setUnits(rt.getInt("units"));
+		}
+		
+		rt.close();
 		return p;
 	}
 	
@@ -280,26 +300,26 @@ public class ObjectFactory {
 		
 		Products products = new Products();
 		ArrayList<Product> productList = new ArrayList<Product>();
-		rt = db.getRowsFromTable("ProductsInvoice", "invoiceID", id);
+		ResultSet rt = db.getRowFromTable("ProductsInvoice", "invoiceID", id);
 		
 		while(rt.next()) {
 			int productsInvoiceID = rt.getInt("productsInvoiceID");
-			productList.add(createProduct(productsInvoiceID, id));
+			productList.add(createProduct(productsInvoiceID));
 		}
 		
 		products.setProducts(productList);
 		
+		rt.close();
 		return products;
 	}
 	
 	/**
-	 * The .close() method automatically closes the ResultSet and Database objects which are created when instantiating
+	 * The .close() method automatically closes the Database object which is created when instantiating
 	 * the class. This conserves system resources and minimizes security risks. This method should always be closed when
 	 * and ObjectFactory object is no longer needed.
 	 * @throws SQLException 
 	 */
 	public void close() throws SQLException {
-		rt.close();
 		db.close();
 	}
 

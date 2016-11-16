@@ -15,6 +15,10 @@ public class Node<T> {
 		this.object = object;
 	}
 	
+	public Node(T object) {
+		this.object = object;
+	}
+	
 	public void setNextNode(Node nextNode) {
 		this.nextNode = nextNode;
 	}
