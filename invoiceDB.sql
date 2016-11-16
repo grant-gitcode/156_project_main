@@ -24,9 +24,9 @@ personID INT(11) NOT NULL AUTO_INCREMENT,
 personCode VARCHAR(30),
 firstName VARCHAR(30),
 lastName VARCHAR(30),
-AddressID INT,
+addressID INT,
 PRIMARY KEY (personID),
-FOREIGN KEY (AddressID) REFERENCES Address(AddressID)
+FOREIGN KEY (addressID) REFERENCES Address(addressID)
 );
 
 -- Creation of Person sample data -- 

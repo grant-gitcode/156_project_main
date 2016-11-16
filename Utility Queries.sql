@@ -20,6 +20,7 @@ SELECT * FROM Customer;
 SELECT * FROM Invoice;
 SELECT * FROM Products;
 SELECT * FROM Address;
+SELECT * FROM ProductsInvoice;
 SELECT * FROM Products AS P JOIN ProductsInvoice AS PI JOIN Invoice AS I 
 ON P.invoiceID = PI.invoiceID AND PI.productsID = P.productsID;
 SELECT * FROM ProductsInvoice;
@@ -31,3 +32,7 @@ SELECT * FROM Products WHERE productsID=1;
 SELECT * FROM Invoice;
 SELECT * FROM Person;
 SELECT * FROM ProductsInvoice;
+
+SELECT COUNT(*) FROM Invoice;
+
+SELECT * FROM Person where personID=5;
