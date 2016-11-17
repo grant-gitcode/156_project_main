@@ -98,6 +98,8 @@ public class LinkedList<T> implements Iterable {
 		//Case 1: The LinkedList is empty.
 		if(startNode == null) {
 			startNode = newNode;
+			size++;
+			return true;
 		}
 		
 		//Case 2: The LinkedList has exactly one object.
@@ -106,17 +108,23 @@ public class LinkedList<T> implements Iterable {
 			//Case 2a: The new node is to be sorted after the current start node.
 			if(comp.compare(newNode, startNode) > 0) {
 				startNode.setNextNode(newNode);
+				size++;
+				return true;
 			}
 			
 			//Case 2b: The new node is to be sorted before the current start node.
 			if(comp.compare(newNode, startNode) < 0) {
 				newNode.setNextNode(startNode);
 				startNode = newNode;
+				size++;
+				return true;
 			}
 			
 			//Case 2c: The new node is equivalent in ranking to the current node.
 			if(comp.compare(newNode, startNode) == 0) {
 				startNode.setNextNode(newNode);
+				size++;
+				return true;
 			}
 		}
 		
@@ -127,6 +135,8 @@ public class LinkedList<T> implements Iterable {
 			if(comp.compare(newNode, startNode) < 0) {
 				newNode.setNextNode(startNode);
 				startNode = newNode;
+				size++;
+				return true;
 			}
 			
 			//Case 3b: The new node should be ranked immediately after the start node.
@@ -134,16 +144,16 @@ public class LinkedList<T> implements Iterable {
 				Node nextNode = startNode.getNextNode();
 				startNode.setNextNode(newNode);
 				newNode.setNextNode(nextNode);
+				size++;
+				return true;
 			}
 			
 			//Case 3c: The new node should be ranked after the start node and after its next node.
 			else if(comp.compare(newNode, startNode) > 0 && comp.compare(newNode, startNode.getNextNode()) > 0) {
 				Node oldNode = startNode;
 				Node nextNode = startNode.getNextNode();
-				System.out.println(((Invoice) newNode.getObject()).getCustomer().getCustomerCode());
-				boolean x = true;
 				
-				while(x) {
+				while(true) {
 					
 					if(comp.compare(newNode, nextNode) > 0) {
 						if(nextNode.getNextNode() != null) {
@@ -152,13 +162,15 @@ public class LinkedList<T> implements Iterable {
 						}
 						else {
 							nextNode.setNextNode(newNode);
-							x = false;
+							size++;
+							return true;
 						}
 					}
 					else {
 						oldNode.setNextNode(newNode);
 						newNode.setNextNode(nextNode);
-						x = false;
+						size++;
+						return true;
 					}
 					
 				}
@@ -167,7 +179,6 @@ public class LinkedList<T> implements Iterable {
 			
 		}
 		
-		size++;
 		return false;
 	}
 

@@ -26,16 +26,14 @@ public class TestMain {
 		Database db = new Database();
 		db.connectToDB();
 		ObjectFactory fact = new ObjectFactory(db);
-		LinkedList list = new LinkedList(new InvoiceComparator(4));
+		LinkedList list = new LinkedList(new InvoiceComparator(2));
 		
 		int x = db.getTableSize("Invoice");
 		for(int i = 1; i <= x; i++) {
 			Invoice inv = fact.createInvoice(i);
 			list.add(inv);
 		}
-		for(int i = 0; i < list.size(); i++) {
-			System.out.println(((Invoice)list.get(i)).getInvoiceCode());
-		}
+		
 		InvoiceReport report = new InvoiceReport();
 		report.printSummaryReport(list);
 		
