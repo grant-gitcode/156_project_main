@@ -261,7 +261,7 @@ public class InvoiceData {
 
 		ps.close();
 		conn.close();
-		db.close();
+		//db.close();
 		}
 		catch (Exception exc){
 			exc.printStackTrace();
@@ -312,7 +312,7 @@ public class InvoiceData {
 		rt.close();
 		ps.close();
 		conn.close();
-		db.close();
+		//db.close();
 		}
 		catch (Exception exc){
 			exc.printStackTrace();
@@ -347,7 +347,7 @@ public class InvoiceData {
 
 		ps.close();
 		conn.close();
-		db.close();
+		//db.close();
 		}
 		catch (Exception exc){
 			exc.printStackTrace();
@@ -381,7 +381,7 @@ public class InvoiceData {
 
 		ps.close();
 		conn.close();
-		db.close();
+		//db.close();
 		}
 		catch (Exception exc){
 			exc.printStackTrace();
@@ -413,7 +413,7 @@ public class InvoiceData {
 
 		ps.close();
 		conn.close();
-		db.close();
+		//db.close();
 		}
 		catch (Exception exc){
 			exc.printStackTrace();
