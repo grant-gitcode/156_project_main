@@ -23,25 +23,8 @@ public class TestMain {
 
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
-		Database db = new Database();
-		db.connectToDB();
-		ObjectFactory fact = new ObjectFactory(db);
-		LinkedList list = new LinkedList(new InvoiceComparator(2));
-		
-		int x = db.getTableSize("Invoice");
-		for(int i = 1; i <= x; i++) {
-			Invoice inv = fact.createInvoice(i);
-			list.add(inv);
-		}
-		
-		InvoiceReport report = new InvoiceReport();
-		report.printSummaryReport(list);
-		
-		Iterator loop = list.iterator();
-		while(loop.hasNext()) {
-			Invoice inv = (Invoice) loop.next();
-			report.printIndividualReports(inv);
-		}
+		InvoiceData.removeAllPersons();
+		InvoiceData.removeAllInvoices();
 		
 		
 		

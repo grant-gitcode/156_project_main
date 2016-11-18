@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import dataContainers.MovieTicket;
+import dataContainers.ObjectFactory;
 import dataContainers.SeasonPass;
 import dataContainers.Student;
+import database.Database;
 import fileReader.InvoiceReader;
+import linkedListADT.InvoiceComparator;
 import linkedListADT.LinkedList;
 
 public class InvoiceReport {
@@ -31,25 +36,30 @@ public class InvoiceReport {
 	 * @throws InvocationTargetException
 	 * @throws InstantiationException
 	 * @throws IOException
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	 public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, IOException {
+	 public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, IOException, ClassNotFoundException, SQLException {
 		 
-		 //Calls all the code used in Phase 1 of this project. Generates XML files and objects.
-		 DataConverter.uploadData();
-		 
-		 //Creation of the reader/writer pair of objects here. Then prints out the report summary.
-		 InvoiceReader reader = new InvoiceReader("data/Invoices.dat");
-		 //InvoiceReport report = new InvoiceReport(reader.getInvoiceList());
-		 //report.printSummaryReport();
-		 
-		 System.out.println("Individual Invoice Detail Reports\n" + DASHED_ROW +"\n"+ DASHED_ROW);
-		 
-		 //Loops to print out the individual reports for each Invoice object in the report object's
-		 //Invoice ArrayList.
-		// for(int i = 0; i < report.invoiceList.size(); i++) {
-			// report.printIndividualReports((Invoice) report.invoiceList.get(i));
-		// }
-		 
+		 Database db = new Database();
+			db.connectToDB();
+			ObjectFactory fact = new ObjectFactory(db);
+			LinkedList list = new LinkedList(new InvoiceComparator(2));
+			
+			int x = db.getTableSize("Invoice");
+			for(int i = 1; i <= x; i++) {
+				Invoice inv = fact.createInvoice(i);
+				list.add(inv);
+			}
+			
+			InvoiceReport report = new InvoiceReport();
+			report.printSummaryReport(list);
+			
+			Iterator loop = list.iterator();
+			while(loop.hasNext()) {
+				Invoice inv = (Invoice) loop.next();
+				report.printIndividualReports(inv);
+			}
 	 }
 	 
 	 public InvoiceReport() {
@@ -222,4 +232,25 @@ public class InvoiceReport {
 		BigDecimal u = BigDecimal.valueOf(x);
 		return format.format(u);
 	}
+	
+	/*
+	public void loadFromFlatFiles() {
+		 //Calls all the code used in Phase 1 of this project. Generates XML files and objects.
+		 DataConverter.uploadData();
+		 
+		 //Creation of the reader/writer pair of objects here. Then prints out the report summary.
+		 InvoiceReader reader = new InvoiceReader("data/Invoices.dat");
+		 InvoiceReport report = new InvoiceReport(reader.getInvoiceList());
+		 report.printSummaryReport();
+		 
+		 System.out.println("Individual Invoice Detail Reports\n" + DASHED_ROW +"\n"+ DASHED_ROW);
+		 
+		 //Loops to print out the individual reports for each Invoice object in the report object's
+		 //Invoice ArrayList.
+		for(int i = 0; i < report.invoiceList.size(); i++) {
+			report.printIndividualReports((Invoice) report.invoiceList.get(i));
+		}
+		
+	}
+	*/
 } 

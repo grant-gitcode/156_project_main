@@ -1,5 +1,7 @@
 package dataContainers;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -85,10 +87,13 @@ public class Person extends Record {
 	}
 
 	@XmlElement
-	public Email getEmails() {
+	public Email getEmailsMail() {
 		return this.emails;
 	}
-
+	
+	public ArrayList<String> getEmails() {
+		return this.emails.getEmail();
+	}
 	
 	public void setEmails(String emailAddress) {
 		this.emails = new Email(emailAddress);

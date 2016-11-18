@@ -19,6 +19,7 @@ public class General extends Customer{
 	
 	public General(String customerCode, String primaryContact, String customerName, String customerAddress) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		super(customerCode, primaryContact, customerName, customerAddress);
+		super.setCustomerType("G");
 	}
 	
 	public General() {

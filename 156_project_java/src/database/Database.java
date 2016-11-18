@@ -1,11 +1,7 @@
 package database;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import com.mysql.jdbc.*;
-
-import dataContainers.Product;
 
 /**The class Database is intended to connect some java code with a specific MySQL database hosted
  * on the unl.cse.edu server, particularly the portion which contains a given student's database.

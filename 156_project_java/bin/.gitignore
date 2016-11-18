@@ -1,10 +1,8 @@
-/Factories/
 /com/
 /containerClasses/
 /dataContainers/
 /database/
 /fileReader/
 /fileWriter/
-/reports/
-/arrayListADT/
 /linkedListADT/
+/reports/

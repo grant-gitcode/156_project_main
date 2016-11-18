@@ -25,6 +25,7 @@ public abstract class Customer extends Record {
 	private Person primaryContact;
 	private String customerName;
 	private Address customerAddress;
+	private String customerType;
 	
 	public Customer(String customerCode, String primaryContact, String customerName, String customerAddress) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		this.customerCode = customerCode;
@@ -79,6 +80,14 @@ public abstract class Customer extends Record {
 	
 	public void setCustomerAddress(Address x) {
 		this.customerAddress = x;
+	}
+	
+	public String getCustomerType() {
+		return this.customerType;
+	}
+
+	public void setCustomerType(String customerType) {
+		this.customerType = customerType;
 	}
 	
 	public abstract double getTax();
@@ -156,4 +165,5 @@ public abstract class Customer extends Record {
 		
 		return result;
 	}
+
 }

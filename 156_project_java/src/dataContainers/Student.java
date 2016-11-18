@@ -18,6 +18,7 @@ public class Student extends Customer {
 
 	public Student(String customerCode, String primaryContact, String customerName, String customerAddress) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		super(customerCode,primaryContact,customerName,customerAddress);
+		super.setCustomerType("S");
 	}
 	
 	public Student() {
