@@ -21,6 +21,7 @@ import reports.Invoice;
  * @author Grant
  *
  */
+@SuppressWarnings("rawtypes")
 public class InvoiceComparator implements Comparator<Node> {
 
 	private int key;
@@ -42,6 +43,7 @@ public class InvoiceComparator implements Comparator<Node> {
 	 * <b>1: Date</b> <br>
 	 * <b>2: Customer (name)</b><br>
 	 * <b>3: Salesperson (name)</b><br>
+	 * <b>4: Invoice Total </b><br>
 	 * @param key
 	 */
 	public InvoiceComparator(int key) {

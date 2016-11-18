@@ -1,7 +1,5 @@
 package database;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import com.mysql.jdbc.*;
+import java.sql.*;
 
 /**The class Database is intended to connect some java code with a specific MySQL database hosted
  * on the unl.cse.edu server, particularly the portion which contains a given student's database.
@@ -36,14 +34,24 @@ public class Database {
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	public Connection connectToDB() throws ClassNotFoundException, SQLException {
+	public Connection connectToDB() {
 		
 		//Sets the name of this class as a very specific path which is used by the database.
-		Class.forName(JDBC_DRIVER);
+		try {
+			Class.forName(JDBC_DRIVER);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//Creates a Connection object by calling a method from the DriverManager class.
 		//Requires the URL of the database, and a username and password.
-		conn = (Connection) DriverManager.getConnection(DATABASE_URL,USER,PASS);
+		try {
+			conn = (Connection) DriverManager.getConnection(DATABASE_URL,USER,PASS);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return conn;
 	}
 	
@@ -72,7 +80,7 @@ public class Database {
 		
 		String query = "SELECT * FROM !";
 		query = query.replace("!", table);
-		ps = conn.clientPrepareStatement(query);
+		ps = conn.prepareStatement(query);
 		rt = (ResultSet) ps.executeQuery();
 		
 		return rt;
@@ -87,7 +95,7 @@ public class Database {
 		
 		String query = "SELECT COUNT(*) FROM $";
 		query = query.replace("$", table);
-		ps = conn.clientPrepareStatement(query);
+		ps = conn.prepareStatement(query);
 		rt = (ResultSet) ps.executeQuery();
 		
 		rt.next();
@@ -109,7 +117,7 @@ public class Database {
 		String query = "SELECT * FROM ! WHERE $=?";
 		query = query.replace("!",table);
 		query = query.replace("$", column);
-		ps = conn.clientPrepareStatement(query);
+		ps = ((Connection) conn).prepareStatement(query);
 		ps.setInt(1, id);
 		rt = (ResultSet) ps.executeQuery();
 		
@@ -126,7 +134,7 @@ public class Database {
 		
 		String query = "Products AS P JOIN ProductsInvoice AS PI JOIN Invoice AS I " +
 				"ON P.productsID = PI.productsID AND PI.invoiceID = I.invoiceID";
-		ps = conn.clientPrepareStatement(query);
+		ps = conn.prepareStatement(query);
 		rt = (ResultSet) ps.executeQuery();
 		
 		ps.close();
@@ -143,7 +151,7 @@ public class Database {
 		
 		String query = "SELECT * FROM Products AS P JOIN ProductsInvoice AS PI "
 				+ "ON P.productsID = PI.productsID WHERE invoiceID=?";
-		ps = conn.clientPrepareStatement(query);
+		ps = conn.prepareStatement(query);
 		ps.setInt(1, i);
 		
 		rt = (ResultSet) ps.executeQuery();
@@ -153,7 +161,7 @@ public class Database {
 	}
 	
 	/**
-	 * Takes a specific productsID and finds a specific row of the join between
+	 * Takes a specific productsInvoiceID and finds a specific row of the join between
 	 * Products and ProductsInvoice.
 	 * @param i
 	 * @return
@@ -162,8 +170,8 @@ public class Database {
 	public ResultSet getInvoiceProduct(int i) throws SQLException {
 			
 			String query = "SELECT * FROM Products AS P JOIN ProductsInvoice AS PI "
-					+ "ON P.productsID = PI.productsID WHERE productsInvoiceID=?";
-			ps = conn.clientPrepareStatement(query);
+					+ "ON P.productsID = PI.productsID WHERE productsInvoiceID = ?";
+			ps = conn.prepareStatement(query);
 			ps.setInt(1, i);
 			
 			rt = (ResultSet) ps.executeQuery();
@@ -172,10 +180,30 @@ public class Database {
 			return rt;
 		}
 	
+	/**
+	 * Gets a specific row of a join of tables using the
+	 * InvoiceProductID from a ProductID and an InvoiceID.
+	 * @throws SQLException 
+	 */
+	public ResultSet getIPFromTwoIDs(int productsID, int invoiceID) throws SQLException {
+		ResultSet rt;
+		String query = "SELECT productsInvoiceID FROM ProductsInvoice"
+				+" WHERE productsID = ? AND invoiceID = ?";
+		ps = ((Connection) conn).prepareStatement(query);
+		ps.setInt(1, productsID);
+		ps.setInt(2, invoiceID);
+		rt = (ResultSet) ps.executeQuery();
+		rt.next();
+		int v = rt.getInt("productsInvoiceID");
+		
+		return getInvoiceProduct(v);
+		
+	}
+	
 	public ResultSet getAddress(int i) throws SQLException {
 		
 		String query = "SELECT * FROM Address WHERE addressID=?";
-		ps = conn.clientPrepareStatement(query);
+		ps = conn.prepareStatement(query);
 		ps.setInt(1, i);
 		
 		rt = (ResultSet) ps.executeQuery();

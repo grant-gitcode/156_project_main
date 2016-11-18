@@ -1,11 +1,6 @@
 package linkedListADT;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
-import reports.Invoice;
 
 /**
  * This class provides an abstract LinkedList which can sort objects using a comparator
@@ -15,9 +10,9 @@ import reports.Invoice;
  *
  * @param <T>
  */
-public class LinkedList<T> implements Iterable {
+public class LinkedList<T> implements Iterable<Object> {
 	
-	private Node startNode;
+	private Node<?> startNode;
 	private int size;
 	private InvoiceComparator comp;
 	
@@ -56,15 +51,16 @@ public class LinkedList<T> implements Iterable {
 		this.comp = comp;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public Iterator<T> iterator() {
-		return new IteratorADT();
+	public Iterator<Object> iterator() {
+		return (Iterator<Object>) new IteratorADT();
 	}
 	
 	class IteratorADT implements Iterator<T> {
 		
-		LinkedList list = LinkedList.this;
-		Node curNode = new Node();
+		LinkedList<T> list = LinkedList.this;
+		Node<?> curNode = new Node<Object>();
 		
 		public IteratorADT() {
 			curNode.setNextNode(list.startNode);
@@ -78,6 +74,7 @@ public class LinkedList<T> implements Iterable {
 			return false;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public T next() {
 			
@@ -93,7 +90,7 @@ public class LinkedList<T> implements Iterable {
 	 */
 	public boolean add(Object e) {
 		
-		Node newNode = new Node(e);
+		Node<?> newNode = new Node<Object>(e);
 		
 		//Case 1: The LinkedList is empty.
 		if(startNode == null) {
@@ -141,7 +138,7 @@ public class LinkedList<T> implements Iterable {
 			
 			//Case 3b: The new node should be ranked immediately after the start node.
 			else if(comp.compare(newNode, startNode) > 0 && comp.compare(newNode, startNode.getNextNode()) < 0) {
-				Node nextNode = startNode.getNextNode();
+				Node<?> nextNode = startNode.getNextNode();
 				startNode.setNextNode(newNode);
 				newNode.setNextNode(nextNode);
 				size++;
@@ -150,8 +147,8 @@ public class LinkedList<T> implements Iterable {
 			
 			//Case 3c: The new node should be ranked after the start node and after its next node.
 			else if(comp.compare(newNode, startNode) > 0 && comp.compare(newNode, startNode.getNextNode()) > 0) {
-				Node oldNode = startNode;
-				Node nextNode = startNode.getNextNode();
+				Node<?> oldNode = startNode;
+				Node<?> nextNode = startNode.getNextNode();
 				
 				while(true) {
 					
@@ -198,7 +195,7 @@ public class LinkedList<T> implements Iterable {
 	 * @return
 	 */
 	public Object get(int index) {
-		Node curNode = new Node();
+		Node<?> curNode = new Node<Object>();
 		curNode.setNextNode(startNode);
 		
 		//Case 1: The index is the 0th position.

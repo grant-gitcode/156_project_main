@@ -153,12 +153,14 @@ public class Products extends Container{
 		
 		boolean isTicket = false;
 		
-		
-		for(int i = 0; i < this.products.size(); i++) {
-			
-			if(this.products.get(i).getClass().getSuperclass().equals(Ticket.class)) {
+		for (int j = 0; j < this.products.size(); j++) {
+			if(this.products.get(j).getClass().getSuperclass().equals(Ticket.class)) {
 				isTicket = true;
 			}
+		}
+		
+		
+		for(int i = 0; i < this.products.size(); i++) {
 			
 			if(this.products.get(i).getClass().equals(ParkingPass.class) && isTicket) {
 				this.products.get(i).setDiscount();

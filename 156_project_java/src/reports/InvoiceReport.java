@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import dataContainers.MovieTicket;
@@ -14,13 +13,12 @@ import dataContainers.ObjectFactory;
 import dataContainers.SeasonPass;
 import dataContainers.Student;
 import database.Database;
-import fileReader.InvoiceReader;
 import linkedListADT.InvoiceComparator;
 import linkedListADT.LinkedList;
 
 public class InvoiceReport {
 	
-	private LinkedList invoiceList;
+	private LinkedList<?> invoiceList;
 	public static final String DASHED_ROW = new String(new char[130]).replace("\0", "-");
 	
 	/**
@@ -44,7 +42,7 @@ public class InvoiceReport {
 		 Database db = new Database();
 			db.connectToDB();
 			ObjectFactory fact = new ObjectFactory(db);
-			LinkedList list = new LinkedList(new InvoiceComparator(2));
+			LinkedList<?> list = new LinkedList<Object>(new InvoiceComparator(4));
 			
 			int x = db.getTableSize("Invoice");
 			for(int i = 1; i <= x; i++) {
@@ -55,7 +53,7 @@ public class InvoiceReport {
 			InvoiceReport report = new InvoiceReport();
 			report.printSummaryReport(list);
 			
-			Iterator loop = list.iterator();
+			Iterator<?> loop = list.iterator();
 			while(loop.hasNext()) {
 				Invoice inv = (Invoice) loop.next();
 				report.printIndividualReports(inv);
@@ -66,15 +64,15 @@ public class InvoiceReport {
 		 
 	 }
 	 
-	 public InvoiceReport(LinkedList invoiceList) {
+	 public InvoiceReport(LinkedList<?> invoiceList) {
 		 this.invoiceList = invoiceList;
 	 }
 	 
-	public LinkedList getInvoiceList() {
+	public LinkedList<?> getInvoiceList() {
 		return this.invoiceList;
 	}
 
-	public void setInvoiceList(LinkedList invoiceList) {
+	public void setInvoiceList(LinkedList<?> invoiceList) {
 		this.invoiceList = invoiceList;
 	}
 	
@@ -82,7 +80,7 @@ public class InvoiceReport {
 	 * A method which uses the ArrayList<Invoice> of an InvoiceReport object to print out a summary
 	 * for all individual Invoice objects. Sends text to the standard output.
 	 */
-	public void printSummaryReport(LinkedList invoiceList) {
+	public void printSummaryReport(LinkedList<?> invoiceList) {
 		this.invoiceList = invoiceList;
 		
 		System.out.println(DASHED_ROW + "\nExecutive Summary Report\n" + DASHED_ROW);

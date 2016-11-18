@@ -100,7 +100,6 @@ public class ParkingPass extends Service {
 	 */
 	@Override
 	public void setDiscount() {
-		
 		if(super.getAttachedProduct() != null) {
 			if(super.getAttachedProduct().getUnits() <= this.getUnits()) {
 				this.discount = this.cost*super.getAttachedProduct().getUnits();

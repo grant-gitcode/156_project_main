@@ -30,7 +30,6 @@ public class MovieTicket extends Ticket {
 	private String movieDateTime;
 	private String movieName;
 	private String screenNo;
-	private double pricePerUnit;
 	private double cost;
 	private Address address;
 	private boolean discounted;
@@ -42,7 +41,6 @@ public class MovieTicket extends Ticket {
 		this.cost = Double.parseDouble(pricePerUnit);
 		this.address = new Address(address);
 		this.screenNo = screenNo;
-		this.pricePerUnit = Double.parseDouble(pricePerUnit);
 		this.discounted = UtilityParser.isDiscounted(this.movieDateTime);
 	}
 	
@@ -62,7 +60,6 @@ public class MovieTicket extends Ticket {
 		this.cost = toClone.cost;
 		this.address = toClone.address;
 		this.screenNo = toClone.screenNo;
-		this.pricePerUnit = toClone.pricePerUnit;
 		this.discounted = toClone.discounted;
 		
 	}
@@ -95,16 +92,6 @@ public class MovieTicket extends Ticket {
 	
 	public void setScreenNo(String screenNo) {
 		this.screenNo = screenNo;
-	}
-
-	@XmlElement
-	public double getPricePerUnit() {
-		return this.pricePerUnit;
-	}
-
-	
-	public void setPricePerUnit(double pricePerUnit) {
-		this.pricePerUnit = pricePerUnit;
 	}
 
 	@XmlElement
@@ -188,7 +175,7 @@ public class MovieTicket extends Ticket {
 	public String toStringTwo() {
 		NumberFormat formatter = new DecimalFormat("#0.00");
 		formatter.setRoundingMode(RoundingMode.HALF_UP);
-		BigDecimal u = BigDecimal.valueOf(this.getPricePerUnit());
+		BigDecimal u = BigDecimal.valueOf(this.cost);
 		
 		String x = "";
 				

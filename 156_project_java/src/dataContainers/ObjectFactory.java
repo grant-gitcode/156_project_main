@@ -2,9 +2,9 @@ package dataContainers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import com.mysql.jdbc.ResultSetMetaData;
+import java.util.Date;
 
 import containerClasses.Products;
 import database.Database;
@@ -58,18 +58,22 @@ public class ObjectFactory {
 	 * @throws ClassNotFoundException 
 	 */
 	public Customer createCustomer(int id) throws SQLException, ClassNotFoundException {
-		
-		ResultSet rt;
 		Customer cust = null;
-		rt = db.getRowFromTable("Customer", "customerID", id);
-		
+		ResultSet rt = db.getRowFromTable("Customer", "customerID", id);
 		rt.next();
-		String type = rt.getString("subClass");
+		String type = rt.getString("subclass");
+		
 		switch(type) {
 		case("G"):
 			cust = new General();
 			break;
 		case("S"):
+			cust = new Student();
+			break;	
+		case("General"):
+			cust = new General();
+			break;
+		case("Student"):
 			cust = new Student();
 			break;	
 		}
@@ -115,7 +119,6 @@ public class ObjectFactory {
 	 * @throws ClassNotFoundException 
 	 */
 	public Invoice createInvoice(int i) throws ClassNotFoundException, SQLException {
-		
 		ResultSet rt;
 		Invoice inv = new Invoice();
 		rt = db.getRowFromTable("Invoice", "invoiceID", i);
@@ -126,6 +129,7 @@ public class ObjectFactory {
 		inv.setInvoiceDate(rt.getDate("date"));
 		inv.setSalesperson(createPerson(rt.getInt("personID")));
 		inv.setProductList(createProducts(i));
+		inv.getProductList().setDiscounted();
 		
 		rt.close();
 		return inv;
@@ -169,14 +173,12 @@ public class ObjectFactory {
 	 * @throws ClassNotFoundException 
 	 */
 	public Product createProduct(int prodInvID) throws SQLException, ClassNotFoundException {
-		
 		ResultSet rt = db.getInvoiceProduct(prodInvID);
 		rt.next();
 		ResultSet rt2 = db.getAddress(rt.getInt("addressID"));
 		rt2.next();
 		String type;
 		Product p = null;
-		
 		type = rt.getString("subType").toUpperCase();
 		
 		/*This provides a case for all four Product sub classes. The nature of the
@@ -199,6 +201,9 @@ public class ObjectFactory {
 						rt2.getString("country")
 						);
 				m.setAddress(address);
+				Date x = rt.getDate("movieDateTime");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				m.setDiscounted(UtilityParser.isDiscounted(format.format(x)));
 				p = m;
 				break;
 			case "S":
@@ -225,15 +230,15 @@ public class ObjectFactory {
 		p.setProductCode(rt.getString("productCode"));
 		p.setUnits(rt.getInt("units"));
 		
-		
 		/*The logic of this is simple: If the Product has an attachedProductID,
 		 *then a method is called which searches for the appropriate object in
 		 *the Products table; and returning this, it sets the attachedProduct
 		 *to this object. 
 		 */
-		if(rt.getInt("attachedProductID") != 0) {
-			ResultSet pd = db.getInvoiceProduct(rt.getInt("attachedProductID"));
-			p.setAttachedProduct(this.createAttachedProduct(pd));
+		if(rt.getInt("attachedProductID") != 0 && rt.getInt("invoiceID") != 0) {
+			ResultSet v = db.getIPFromTwoIDs
+					(rt.getInt("attachedProductID"),rt.getInt("invoiceID"));
+			p.setAttachedProduct(this.createAttachedProduct(v));
 		}
 		
 		rt.close();
@@ -247,7 +252,7 @@ public class ObjectFactory {
 		String type;
 		Product p = null;
 		rt2.next();
-		type = rt.getString("subType").toUpperCase();
+		type = rt.getString("subType").toUpperCase().trim();
 		
 		/*This provides a case for all attached classes. The nature of the
 		 * switch statement allows for this code to be easily extensible, as the 
@@ -269,19 +274,18 @@ public class ObjectFactory {
 						rt2.getString("country")
 						);
 				m.setAddress(address);
+				m.setProductCode(rt.getString("productCode"));
+				m.setUnits(rt.getInt("units"));
 				p = m;
 				break;
 			case "S":
 				SeasonPass s = new SeasonPass();
 				s.setName(rt.getString("productName"));
 				s.setCost(rt.getDouble("cost"));
+				s.setProductCode(rt.getString("productCode"));
+				s.setUnits(rt.getInt("units"));
 				p = s;
 				break;
-		}
-		
-		if(type == "M" || type == "S") {
-			p.setProductCode(rt.getString("productCode"));
-			p.setUnits(rt.getInt("units"));
 		}
 		
 		rt.close();
